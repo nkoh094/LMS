@@ -1,11 +1,9 @@
-# LMS
-
 Host for the LMS source code 
 
 Arslan Razzaq Contact:
     M. Arslan Razzaq
     Contact Mobile: +92 333 4023554
-    
+
 
 # Prerequisite For running node app locally
 
@@ -14,10 +12,9 @@ Arslan Razzaq Contact:
 -MYSQL (version 5.7.28)
 
 
-After installing these we need to install the node modules using command
+After installing these navigate to the client folder and we need to install the node modules using below command 
 
 - npm install --save
 
-Run server using command
-
-- nodemon  or node server.js 
+# Run Frontend
+- npm start
