@@ -50,6 +50,59 @@ class AdminLayout extends Component {
         }
     }
 
+
+    routeSetup = (route, index) => {
+        if (this.props.user && this.props.user.role === 'user' && this.props.user.status && route.user) {
+            return (
+                <Route
+                    key={index}
+                    path={route.path}
+                    exact={route.exact}
+                    name={route.name}
+                    render={props => (
+                        <route.component {...props} />
+                )} />
+            );
+        } else if (this.props.user && this.props.user.role === 'faculty' && this.props.user.status && route.faculty) {
+            return (
+                <Route
+                    key={index}
+                    path={route.path}
+                    exact={route.exact}
+                    name={route.name}
+                    render={props => (
+                        <route.component {...props} />
+                )} />
+            );
+        } else if (this.props.user && !this.props.user.status && route.faculty && route.user) {
+            return (
+                <Route
+                    key={index}
+                    path={route.path}
+                    exact={route.exact}
+                    name={route.name}
+                    render={props => (
+                        <route.component {...props} />
+                )} />
+            );
+        } else {
+            return null;
+        }
+    }
+
+    redirectToPageAfterRefresh = () => {
+        let local = localStorage.getItem('lms-token');
+        if (this.props.user && this.props.user.role === 'user' && this.props.user.status) {
+            return this.props.defaultPath;
+        } else if (this.props.user  && this.props.user.role === 'faculty' && this.props.user.status) {
+            return '/home';
+        } else if (local){
+            return this.props.defaultPath;
+        } else {
+            return '/login';
+        }
+    }
+
     render() {
 
         /* full screen exit call */
@@ -59,24 +112,7 @@ class AdminLayout extends Component {
         document.addEventListener('MSFullscreenChange', this.fullScreenExitHandler);
         const menu = routes.map((route, index) => {
             return (route.component) ? (
-                this.props.user && this.props.user.role === 'user' && route.user ?
-                    <Route
-                        key={index}
-                        path={route.path}
-                        exact={route.exact}
-                        name={route.name}
-                        render={props => (
-                            <route.component {...props} />
-                        )} />
-                    : this.props.user && this.props.user.role === 'faculty' && route.faculty ?
-                        <Route
-                        key={index}
-                        path={route.path}
-                        exact={route.exact}
-                        name={route.name}
-                        render={props => (
-                            <route.component {...props} />
-                        )} /> : null  
+                this.routeSetup(route, index)
             ) : (null);
         });
 
@@ -94,7 +130,7 @@ class AdminLayout extends Component {
                                             <Suspense fallback={<Loader/>}>
                                                 <Switch>
                                                     {menu}
-                                                    <Redirect from="/" to={this.props.user && this.props.user.role === 'user' ? this.props.defaultPath : '/home' } />
+                                                    <Redirect from="/" to={ this.redirectToPageAfterRefresh() } />
                                                 </Switch>
                                             </Suspense>
                                         </div>

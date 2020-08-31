@@ -36,7 +36,7 @@ class NavRight extends Component {
                             <Dropdown.Menu alignRight className="profile-notification">
                                 <div className="pro-head">
                                     <img src={Avatar1} className="img-radius" alt="User Profile"/>
-                                    <span>John Doe</span>
+                                    <span>{this.props.user ? `${this.props.user.firstName}` : null }</span>
                                     <a href={DEMO.BLANK_LINK} onClick={(e) => this.logout(e) } className="dud-logout" title="Logout">
                                         <i className="feather icon-log-out"/>
                                     </a>
@@ -50,4 +50,9 @@ class NavRight extends Component {
     }
 }
 
-export default connect(null, actions)(withRouter(NavRight));
+const mapStateToProps = state => {
+    return {
+        user: state.userDetails.user
+    }
+}
+export default connect(mapStateToProps, actions)(withRouter(NavRight));

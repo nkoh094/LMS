@@ -25,11 +25,11 @@ class Sellers {
                     return res.status(400).send({ status: false, message: `Bad Request. Invalid Student/Faculty ID` });
                 }
 
-                let result = await userModel.findOne({ where: { id, role, status: 0 } });
+                let result = await userModel.findOne({ where: { id, status: 0 } });
                 if (!result) {
                     return res.status(404).send({ status: false, message: `Bad Request. User not found` });
                 }
-                let update = await result.update({ status: 1, u_id });
+                let update = await result.update({ status: 1, u_id, role });
                 return jwt.sign({ id: update.id, status: update.status, role: update.role, firstName: update.first_name, lastName: update.last_name, email: update.email }, config.privateKey, { expiresIn: '7 days' }, function(err, token) {
                     if (err) {
                         console.log('Error in generating jwt token. ', err);
