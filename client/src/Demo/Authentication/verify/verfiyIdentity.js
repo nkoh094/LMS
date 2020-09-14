@@ -70,7 +70,7 @@ class VerifyIdentity extends React.Component {
                 await localStorage.setItem('lms-token', response.data.token);
                 await this.props.signIn(response.data.user);
                 await this.setState({ isLoading: false });
-                response.data.user.role === 'user' ? this.props.history.push('/dashboard') : this.props.history.push('/home');
+                response.data.user.role === 'user' ? this.props.history.push('/interests') : this.props.history.push('/home');
             })
             .catch(err => {
                 console.log('Error: ', err.response);

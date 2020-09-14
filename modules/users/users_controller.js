@@ -58,6 +58,149 @@ class Sellers {
         }
     }
 
+    userRegister() {
+        return async (req, res) => {
+            let { firstName, lastName, email, password, u_id } = req.body;
+
+            if (!firstName ||!lastName ||!email ||!password) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+            
+            try {
+                const userExists = await userModel.findOne({ where: { email: email.toLowerCase() } });
+                if (userExists) {
+                    return res.status(401).send({ msg: 'User against this email already exist' });
+                } else {
+                    let generateHash = function (password) {
+                        return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+                    };
+                    
+                    let hashPassword = generateHash(password);
+                    let obj = {
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email.toLowerCase(),
+                        password: hashPassword
+                    };
+                    if (u_id) {
+                        obj.u_id = u_id,
+                        obj.role = 'faculty',
+                        obj.status = true
+                    }
+                    const user = await userModel.create(obj);
+                    return res.status(200).send({ status: true, msg: 'User Registered Successfully' });
+                }
+            } catch (error) {
+                console.log('Error in user registeration', error);
+                return res.status(500).send({ msg: 'Internal Server Error', error });
+            }
+        }
+    }
+
+    adminRegister() {
+        return async (req, res) => {
+            let { firstName, lastName, email, password } = req.body;
+
+            if (!firstName ||!lastName ||!email ||!password) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+            
+            try {
+                const userExists = await userModel.findOne({ where: { email: email.toLowerCase() } });
+                if (userExists) {
+                    return res.status(401).send({ msg: 'User against this email already exist' });
+                } else {
+                    let generateHash = function (password) {
+                        return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+                    };
+                    
+                    let hashPassword = generateHash(password);
+             
+                    const user = await userModel.create({
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email.toLowerCase(),
+                        password: hashPassword,
+                        role: 'admin',
+                        status: true
+                    });
+                    return res.status(200).send({ status: true, msg: 'Admin Registered Successfully' });
+                }
+            } catch (error) {
+                console.log('Error in admin registeration', error);
+                return res.status(500).send({ msg: 'Internal Server Error', error });
+            }
+        }
+    }
+
+    listUsers() {
+        return async (req, res) => { 
+            
+            let { user } = req.params;
+
+            if (!user) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+
+            try {
+                const result = await userModel.findAndCountAll({ where: { role: user } });
+                const { count, rows } = result;
+                return res.status(200).send({ count, data: rows });
+            } catch (err) {
+                console.log('Error in listing user from db', err);
+                return res.status(500).json({ msg: 'Internal Server Error', error: err });
+            }   
+        }
+    }
+    
+    userLogin() {
+        return async (req, res) => {
+            let { email, password } = req.body;
+
+            if (!email ||!password) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+            
+            try {
+                const userExists = await userModel.findOne({ where: { email: email.toLowerCase() } });
+                if (userExists) {
+                    let validPasscode = await bcrypt.compareSync(password, userExists.password);
+                    if (validPasscode) {
+                        return jwt.sign({ id: userExists.id, status: userExists.status, role: userExists.role, firstName: userExists.first_name, lastName: userExists.last_name, email: userExists.email }, config.privateKey, { expiresIn: '30 days' }, function(err, token) {
+                            if (err) {
+                                console.log('Error in generating jwt token. ', err);
+                                res.status(500);
+                                return res.json({ msg: 'Internal Server Error', error: err });
+                            } else {
+                                res.status(200);
+                                return res.send({ 
+                                    token: token,
+                                    user: { 
+                                        id: userExists.id,
+                                        firstName: userExists.first_name, 
+                                        lastName: userExists.last_name, 
+                                        email: userExists.email, 
+                                        status: userExists.status,
+                                        role: userExists.role 
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        res.status(401);
+                        return res.send({ msg: 'Invalid Email or Password' });
+                    }
+                } else {
+                    res.status(404);
+                    return res.send({ msg: 'No user registered against this email' });
+                }
+            } catch (error) {
+                console.log('Error in user login', error);
+                return res.status(500).send({ msg: 'Internal Server Error', error });
+            }
+        }
+    }
+
     fbAuth() {
         return async (req, res) => {
             const {

@@ -74,6 +74,17 @@ class AdminLayout extends Component {
                         <route.component {...props} />
                 )} />
             );
+        } else if (this.props.user && this.props.user.role === 'admin' && this.props.user.status && route.admin) {
+            return (
+                <Route
+                    key={index}
+                    path={route.path}
+                    exact={route.exact}
+                    name={route.name}
+                    render={props => (
+                        <route.component {...props} />
+                )} />
+            );
         } else if (this.props.user && !this.props.user.status && route.faculty && route.user) {
             return (
                 <Route
@@ -96,7 +107,9 @@ class AdminLayout extends Component {
             return this.props.defaultPath;
         } else if (this.props.user  && this.props.user.role === 'faculty' && this.props.user.status) {
             return '/home';
-        } else if (local){
+        } else if (this.props.user  && this.props.user.role === 'admin' && this.props.user.status) {
+            return '/admin/dashboard';
+        } else if (local) {
             return this.props.defaultPath;
         } else {
             return '/login';

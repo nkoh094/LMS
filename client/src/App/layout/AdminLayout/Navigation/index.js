@@ -108,7 +108,7 @@ class Navigation extends Component {
         let navContent = (
             <div className="navbar-wrapper">
                 <NavLogo collapseMenu={this.props.collapseMenu} windowWidth={this.props.windowWidth} onToggleNavigation={this.props.onToggleNavigation} />
-                <NavContent navigation={this.props.user && this.props.user.role === 'user' ? navigation.user : this.props.user && this.props.user.role === 'faculty' ? navigation.faculty : []} />
+                <NavContent navigation={this.props.user && this.props.user.role === 'user' ? navigation.user : this.props.user && this.props.user.role === 'faculty' ? navigation.faculty : this.props.user && this.props.user.role === 'admin' ? navigation.admin : [] } />
             </div>
         );
         if (this.props.windowWidth < 992) {
@@ -116,7 +116,7 @@ class Navigation extends Component {
                 <OutsideClick>
                     <div className="navbar-wrapper">
                         <NavLogo collapseMenu={this.props.collapseMenu} windowWidth={this.props.windowWidth} onToggleNavigation={this.props.onToggleNavigation} />
-                        <NavContent navigation={this.props.user && this.props.user.role === 'user' ? navigation.user : this.props.user && this.props.user.role === 'faculty' ? navigation.faculty : [] } />
+                        <NavContent navigation={this.props.user && this.props.user.role === 'user' ? navigation.user : this.props.user && this.props.user.role === 'faculty' ? navigation.faculty : this.props.user && this.props.user.role === 'admin' ? navigation.admin : [] } />
                     </div>
                 </OutsideClick>
             );

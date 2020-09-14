@@ -8,7 +8,7 @@ import config from '../../../config';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import * as actions from '../../../store/actions/userActions';
-
+import { NavLink } from 'react-router-dom';
 
 class SignUp1 extends React.Component {
 
@@ -30,7 +30,6 @@ class SignUp1 extends React.Component {
             .then(result => {
                 localStorage.setItem('lms-token', result.data.token);
                 this.props.signIn(result.data.user);
-                console.log(result.data.user);
                 result.data.user.status ? result.data.user.role === 'user' ? this.props.history.push('/dashboard') : this.props.history.push('/home') : this.props.history.push('/verify/identity');
             })
             .catch(err => {
@@ -64,9 +63,10 @@ class SignUp1 extends React.Component {
             return;
         }
         axios.post(`${config.prod}/api/user/signin`, { email: email.trim(), password: password.trim() })
-            .then(async response => {
-                await localStorage.setItem('lms-token', response.data.token);
-                response.data.user.status ? response.data.user.role === 'user' ? this.props.history.push('/dashboard') : this.props.history.push('/home')  : this.props.history.push('/verify/identity');
+            .then(async result => {
+                await localStorage.setItem('lms-token', result.data.token);
+                await this.props.signIn(result.data.user);
+                result.data.user.status ? result.data.user.role === 'admin' ? this.props.history.push('/admin/dashboard') : result.data.user.role === 'user' ? this.props.history.push('/dashboard') : this.props.history.push('/home')  : this.props.history.push('/verify/identity');
             })
             .catch(err => {
                 console.log('Error: ', err.response);
@@ -160,6 +160,7 @@ class SignUp1 extends React.Component {
                                         )}
                                     />
                                 </div>
+                                <p className="mb-0 text-muted">Create an account? <NavLink to="/signup">Signup</NavLink></p>
                             </div>
                         </div>
                     </div>
