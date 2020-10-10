@@ -7,6 +7,7 @@ const Classes = require('../modules/classes/classes_controller');
 const Lectures = require('../modules/lectures/lectures_controller');
 const Topics = require('../modules/topics/topics_controller');
 const UserInterest = require('../modules/usersInerests/user_interest_controller');
+const Annoucements = require('../modules/annoucements/annoucements_controller');
 
 module.exports = function(app) {
   
@@ -76,4 +77,13 @@ module.exports = function(app) {
 
   //user interest delete
   app.delete('/api/user/interest/delete', UserInterest.deleteInterest());
+  
+   //annoucenment create
+  app.post('/api/annoucement/create', Annoucements.createAnnoucement());
+
+  //annoucement list
+  app.get('/api/annoucement/:id/list', Annoucements.listAnnoucement());
+
+  //annoucement delete
+  app.delete('/api/annoucements/delete', Annoucements.deleteAnnoucement());
 };

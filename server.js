@@ -32,6 +32,7 @@ const classes = require("./modules/classes/classes_model");
 const Lectures = require("./modules/lectures/lectures_model");
 const Topics = require("./modules/topics/topics_model");
 const UserInterest = require("./modules/usersInerests/user_interest_model");
+const Annoucements = require("./modules/annoucements/annoucements_model");
 
 let promiseArray = [];
 // // sync db models
@@ -47,6 +48,8 @@ Promise.all(promiseArray)
     classes.sync();
     Lectures.belongsTo(classes);
     Lectures.sync();
+    Annoucements.belongsTo(classes);
+    Annoucements.sync();
     Topics.belongsTo(classes);
     Topics.sync();
     UserInterest.belongsTo(users);
