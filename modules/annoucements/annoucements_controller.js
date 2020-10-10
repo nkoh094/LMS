@@ -14,7 +14,7 @@ class Annoucement {
             }
             
             try {
-                let annoucement = { name, description, class_id };
+                let annoucement = { title, description, class_id };
                 const result = await annoucementsModel.create(annoucement);
                 return res.status(200).json({ msg: 'Annoucement Created Successfully' });
             } catch (err) {

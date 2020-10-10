@@ -85,5 +85,5 @@ module.exports = function(app) {
   app.get('/api/annoucement/:id/list', Annoucements.listAnnoucement());
 
   //annoucement delete
-  app.delete('/api/annoucements/delete', Annoucements.deleteAnnoucement());
+  app.delete('/api/annoucement/delete', Annoucements.deleteAnnoucement());
 };

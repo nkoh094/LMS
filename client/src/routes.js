@@ -24,6 +24,8 @@ const AddVideoLecture = React.lazy(() => import("./Demo/Faculty/CourseContent/Ad
 const ListVideoLecture = React.lazy(() => import("./Demo/Faculty/CourseContent/ListVideoLectures"));
 const AddTopic = React.lazy(() => import("./Demo/Faculty/CourseContent/AddTopic"));
 const AddGeneralTopic = React.lazy(() => import("./Demo/Faculty/GeneralTopics/AddTopic"));
+const AddAnnoucements = React.lazy(() => import("./Demo/Faculty/Annoucements/AddAnnoucements"));
+const ListAnnoucements = React.lazy(() => import("./Demo/Faculty/Annoucements/ListAnnoucement"));
 
 //Users
 const UeserInterests = React.lazy(() => import("./Demo/Users/Interests/Interests"));
@@ -44,6 +46,8 @@ const routes = [
     { path: '/faculty/class/:id/course/list', exact: true, faculty: true, component: RequireAuth(ListVideoLecture) },
     { path: '/faculty/class/:id/topic/create', exact: true, faculty: true, component: RequireAuth(AddTopic) },
     { path: '/faculty/topic/general/create', exact: true, faculty: true, component: RequireAuth(AddGeneralTopic) },
+    { path: '/faculty/class/:id/annoucement/create', exact: true, faculty: true, component: RequireAuth(AddAnnoucements) },
+    { path: '/faculty/class/:id/annoucement/list', exact: true, faculty: true, component: RequireAuth(ListAnnoucements) },
 ];
 
 export default routes;

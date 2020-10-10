@@ -33,6 +33,14 @@ class Classes extends React.Component {
         this.props.history.push(`/faculty/class/${value.id}/topic/create`)
     }
 
+    addAnnoucement(value) {
+        this.props.history.push(`/faculty/class/${value.id}/annoucement/create`)
+    }
+
+    listAnnoucement(value) {
+        this.props.history.push(`/faculty/class/${value.id}/annoucement/list`)
+    }
+
     listVideoLecture(value) {
         this.props.history.push(`/faculty/class/${value.id}/course/list`)
     }
@@ -152,6 +160,8 @@ class Classes extends React.Component {
                                                             <Button onClick={() => this.listVideoLecture(elem)} variant="outline-primary" className="mr-2 mt-2"> View Lectures List </Button>
                                                             <Button onClick={() => this.addVideoLecture(elem)} variant="outline-primary" className="mr-2 mt-2"> Add Lecture </Button>
                                                             <Button onClick={() => this.addTopic(elem)} variant="outline-primary" className="mr-2 mt-2">Add Topic</Button>
+                                                            <Button onClick={() => this.addAnnoucement(elem)} variant="outline-primary" className="mr-2 mt-2">Add Annoucement</Button>
+                                                            <Button onClick={() => this.listAnnoucement(elem)} variant="outline-primary" className="mr-2 mt-2">List Annoucement</Button>
                                                             <Button href={`#`} variant="outline-primary" className="mr-2 mt-2"> Add Course Material </Button>
                                                         </Card.Body>
                                                     </Card>
