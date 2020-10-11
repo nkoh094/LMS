@@ -33,6 +33,10 @@ const Lectures = require("./modules/lectures/lectures_model");
 const Topics = require("./modules/topics/topics_model");
 const UserInterest = require("./modules/usersInerests/user_interest_model");
 const Annoucements = require("./modules/annoucements/annoucements_model");
+const Assignments = require("./modules/assignments/assignments_model");
+const AssignmentSubmission = require("./modules/studentFacultyAssignments/student_faculty_assignment_model");
+const assignmentSubmission = require("./modules/studentFacultyAssignments/student_faculty_assignment_model");
+const studentsEnrolled = require("./modules/studentsEnrolled/students_enrolled_model");
 
 let promiseArray = [];
 // // sync db models
@@ -52,6 +56,16 @@ Promise.all(promiseArray)
     Annoucements.sync();
     Topics.belongsTo(classes);
     Topics.sync();
+    Assignments.belongsTo(classes);
+    Assignments.sync();
+    AssignmentSubmission.belongsTo(users);
+    AssignmentSubmission.belongsTo(Assignments);
+    assignmentSubmission.sync();
+    
+    studentsEnrolled.sync();
+    classes.belongsToMany(users, { through: 'students_enrolled', foreignKey: "class_id" });
+    users.belongsToMany(classes, { through: "students_enrolled", foreignKey: "user_id" });
+   
     UserInterest.belongsTo(users);
     UserInterest.belongsTo(interests);
     UserInterest.sync();

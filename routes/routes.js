@@ -8,6 +8,7 @@ const Lectures = require('../modules/lectures/lectures_controller');
 const Topics = require('../modules/topics/topics_controller');
 const UserInterest = require('../modules/usersInerests/user_interest_controller');
 const Annoucements = require('../modules/annoucements/annoucements_controller');
+const Assignments = require('../modules/assignments/assignments_controller');
 
 module.exports = function(app) {
   
@@ -86,4 +87,16 @@ module.exports = function(app) {
 
   //annoucement delete
   app.delete('/api/annoucement/delete', Annoucements.deleteAnnoucement());
+
+  //Assignment create
+  app.post('/api/class/assignment/create', uploader.upload.single('assignment'), Assignments.createAssignment());
+
+  //Assignment List 
+  app.get('/api/class/:id/assignment/list', Assignments.listAssignment());
+
+  //Assignment Submission List 
+  app.get('/api/class/assignment/:id/submission/list', Assignments.submissionList());
+
+  //Assignment Submission Update 
+  app.post('/api/class/assignment/submission/update', Assignments.submissionUpdate());
 };
