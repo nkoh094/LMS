@@ -9,6 +9,7 @@ const Topics = require('../modules/topics/topics_controller');
 const UserInterest = require('../modules/usersInerests/user_interest_controller');
 const Annoucements = require('../modules/annoucements/annoucements_controller');
 const Assignments = require('../modules/assignments/assignments_controller');
+const CourseMaterial = require('../modules/courseMaterial/course_material_controller');
 
 module.exports = function(app) {
   
@@ -99,4 +100,10 @@ module.exports = function(app) {
 
   //Assignment Submission Update 
   app.post('/api/class/assignment/submission/update', Assignments.submissionUpdate());
+
+  //Course Material create
+  app.post('/api/class/course/material/create', uploader.upload.single('course-material'), CourseMaterial.createCourseMaterial());
+
+  //Course Material List 
+  app.get('/api/class/:id/course/material/list', CourseMaterial.listCourseMaterial());
 };
