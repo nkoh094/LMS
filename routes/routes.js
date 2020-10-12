@@ -10,6 +10,7 @@ const UserInterest = require('../modules/usersInerests/user_interest_controller'
 const Annoucements = require('../modules/annoucements/annoucements_controller');
 const Assignments = require('../modules/assignments/assignments_controller');
 const CourseMaterial = require('../modules/courseMaterial/course_material_controller');
+const Quiz = require('../modules/quizes/quiz_controller');
 
 module.exports = function(app) {
   
@@ -109,4 +110,16 @@ module.exports = function(app) {
 
   //Course Material List 
   app.get('/api/class/:id/course/material/list', CourseMaterial.listCourseMaterial());
+
+  //Quiz create
+  app.post('/api/class/quiz/create', Quiz.createQuiz());
+
+  //Quiz List 
+  app.get('/api/class/:id/quiz/list', Quiz.listQuiz());
+  
+  //Quiz Submission List 
+  app.get('/api/class/quiz/:id/submission/list', Quiz.submissionList());
+
+  //Quiz Submission Update 
+  app.post('/api/class/quiz/submission/update', Quiz.submissionUpdate());
 };

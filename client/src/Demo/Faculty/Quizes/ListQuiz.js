@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button, Modal, Table } from 'react-bootstrap';
+import { Row, Col, Card, Button, Table } from 'react-bootstrap';
 import Aux from "../../../hoc/_Aux";
 import axios from 'axios';
 import config from '../../../config';
@@ -7,7 +7,7 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import Loader from '../../../App/layout/Loader';
 import { connect } from 'react-redux';
 
-class ListTopics extends React.Component {
+class ListQuiz extends React.Component {
 
     constructor(props) {
         super(props);
@@ -22,17 +22,20 @@ class ListTopics extends React.Component {
         }
     }
 
-    componentDidMount = () => {
-        this.getTopicsList();
+    componentDidMount = async () => {
+        if (this.props && this.props.user && this.props.user.id && this.props.match && this.props.match.params && this.props.match.params.id) {
+            await this.setState({ class_id: this.props.match.params.id })
+            this.getQuizList();
+        }
     }
     
-    openDiscussionForum(value) {
-        alert("Opening");
+    openSubmissions(value) {
+        this.props.history.push(`/faculty/class/${this.state.class_id}/quiz/${value.id}/submissions`);
     }
 
-    getTopicsList() {
+    getQuizList() {
         this.setState({ isLoading: true });
-		axios.get(`${config.prod}/api/topic/${this.props.user.id}/list`)
+		axios.get(`${config.prod}/api/class/${this.state.class_id}/quiz/list`)
 			.then(response => {
 				this.setState({ data: response.data.data, isLoading: false });
 			})
@@ -61,13 +64,6 @@ class ListTopics extends React.Component {
         }
     };
 
-    cancelDownload() {
-		this.setState({ 
-            showModal: false,
-			title: ''
-		});
-    }
-    
     render() {
         return (
             <Aux>
@@ -77,7 +73,7 @@ class ListTopics extends React.Component {
                     <Col>
                         <Card>
                             <Card.Header>
-                                <Card.Title as="h5">General Topics List</Card.Title>
+                                <Card.Title as="h5">Quiz List</Card.Title>
                             </Card.Header>
                             <Card.Body>
                                 <Row>
@@ -87,7 +83,8 @@ class ListTopics extends React.Component {
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Title</th>
-                                                    <th>Description</th>
+                                                    <th>Total Marks</th>
+                                                    <th>Submission Date</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
@@ -96,10 +93,11 @@ class ListTopics extends React.Component {
                                                     this.state.data.map((elem, i) => (
                                                         <tr key={i}>
                                                             <td>{i}</td>
-                                                            <td>{elem.name}</td>
-                                                            <td style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{elem.description}</td>
+                                                            <td>{elem.title}</td>
+                                                            <td>{elem.total_marks}</td>
+                                                            <td>{new Date(elem.submission_date).toString()}</td>
                                                             <td>
-                                                                <Button onClick={(e) => this.openDiscussionForum(elem)} variant='primary'>Open Forum</Button>
+                                                                <Button onClick={(e) => this.openSubmissions(elem)} variant='primary'>Check Submission</Button>
                                                             </td>
                                                         </tr>
                                                     ))
@@ -123,4 +121,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(ListTopics);
+export default connect(mapStateToProps, null)(ListQuiz);

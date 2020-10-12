@@ -37,6 +37,14 @@ class Classes extends React.Component {
         this.props.history.push(`/faculty/class/${value.id}/topic/list`)
     }
     
+    addQuiz(value) {
+        this.props.history.push(`/faculty/class/${value.id}/quiz/create`)
+    }
+
+    listQuiz(value) {
+        this.props.history.push(`/faculty/class/${value.id}/quiz/list`)
+    }
+
     addAnnoucement(value) {
         this.props.history.push(`/faculty/class/${value.id}/annoucement/create`)
     }
@@ -185,6 +193,8 @@ class Classes extends React.Component {
                                                             <Button onClick={() => this.listAnnoucement(elem)} variant="outline-primary" className="mr-2 mt-2">List Annoucement</Button>
                                                             <Button onClick={() => this.addAssignment(elem)} variant="outline-primary" className="mr-2 mt-2">Add Assignment</Button>
                                                             <Button onClick={() => this.listAssignment(elem)} variant="outline-primary" className="mr-2 mt-2">List Assignment</Button>
+                                                            <Button onClick={() => this.addQuiz(elem)} variant="outline-primary" className="mr-2 mt-2">Add Quiz</Button>
+                                                            <Button onClick={() => this.listQuiz(elem)} variant="outline-primary" className="mr-2 mt-2">List Quiz</Button>
                                                             <Button onClick={() => this.addCourseMaterial(elem)} variant="outline-primary" className="mr-2 mt-2">Add Course Material</Button>
                                                             <Button onClick={() => this.listCourseMaterial(elem)} variant="outline-primary" className="mr-2 mt-2">List Course Material</Button>
                                                         </Card.Body>

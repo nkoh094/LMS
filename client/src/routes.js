@@ -33,6 +33,9 @@ const AddCourseMaterial = React.lazy(() => import("./Demo/Faculty/CourseMaterial
 const ListCourseMaterial = React.lazy(() => import("./Demo/Faculty/CourseMaterial/ListCourseMaterial"));
 const ListGeneralTopics = React.lazy(() => import("./Demo/Faculty/GeneralTopics/ListTopics"));
 const ListTopic = React.lazy(() => import("./Demo/Faculty/CourseContent/ListTopic"));
+const AddQuiz = React.lazy(() => import("./Demo/Faculty/Quizes/AddQuiz"));
+const ListQuiz = React.lazy(() => import("./Demo/Faculty/Quizes/ListQuiz"));
+const QuizSubmissionList = React.lazy(() => import("./Demo/Faculty/Quizes/SubmissionList"));
 
 //Users
 const UeserInterests = React.lazy(() => import("./Demo/Users/Interests/Interests"));
@@ -62,6 +65,9 @@ const routes = [
     { path: '/faculty/class/:id/course/material/list', exact: true, faculty: true, component: RequireAuth(ListCourseMaterial) },
     { path: '/faculty/topic/general/list', exact: true, faculty: true, component: RequireAuth(ListGeneralTopics) },
     { path: '/faculty/class/:id/topic/list', exact: true, faculty: true, component: RequireAuth(ListTopic) },
+    { path: '/faculty/class/:id/quiz/create', exact: true, faculty: true, component: RequireAuth(AddQuiz) },
+    { path: '/faculty/class/:id/quiz/list', exact: true, faculty: true, component: RequireAuth(ListQuiz) },
+    { path: '/faculty/class/:id/quiz/:assign_id/submissions', exact: true, faculty: true, component: RequireAuth(QuizSubmissionList) },
     
 ];
 
