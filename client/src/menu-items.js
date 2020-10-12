@@ -76,26 +76,6 @@ export default {
                             url: '/faculty/topic/general/list'
                         }
                     ]
-                },
-                {
-                    id: 'announcements',
-                    title: 'Announcements',
-                    type: 'collapse',
-                    icon: 'feather icon-box',
-                    children: [
-                        {
-                            id: 'listAnnouncements',
-                            title: 'List',
-                            type: 'item',
-                            url: '/announcements/list'
-                        },
-                        {
-                            id: 'create',
-                            title: 'Create',
-                            type: 'item',
-                            url: '/announcements/create'
-                        }
-                    ]
                 }
             ]
         }

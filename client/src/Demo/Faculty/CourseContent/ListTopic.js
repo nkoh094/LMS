@@ -6,58 +6,36 @@ import config from '../../../config';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Loader from '../../../App/layout/Loader';
 import { connect } from 'react-redux';
-import fileDownload from 'js-file-download';
 
-class ListCourseMaterial extends React.Component {
+class ListTopic extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             isLoading: false,
-            downloadRowId: null,
-            elem: {}, 
-			showModal: false,
-			handleCloseModal: false,
             isValid: {
                 value: false,
                 text: ''   
             },
             data: [],
-            class_id: '',
-            title: ''
+            class_id: ''
         }
     }
-
-    openDownloadModal(value) {
-		this.setState({ title: value.title, showModal: true, downloadRowId: value.id, elem: value });
-    }
-    
-	closeDownloadModal() {
-		this.setState({ showModal: false });
-    }
-
-    handleDownload() {
-        this.setState({ showModal: false, isLoading: true });
-        axios.get(`${config.prod}/${this.state.elem.file}`, {
-            responseType: 'blob',
-          }).then(res => {
-            let temp = this.state.elem.file.split('.');
-            fileDownload(res.data, `${this.state.title}.${temp[temp.length-1]}`);
-            this.setState({ isLoading: false });
-          });
-    }
-
 
     componentDidMount = async () => {
         if (this.props && this.props.user && this.props.user.id && this.props.match && this.props.match.params && this.props.match.params.id) {
             await this.setState({ class_id: this.props.match.params.id })
-            this.getCourseMaterialList();
+            this.getTopicsList();
         }
     }
     
-    getCourseMaterialList() {
+    openDiscussionForum(value) {
+        alert("Opening");
+    }
+
+    getTopicsList() {
         this.setState({ isLoading: true });
-		axios.get(`${config.prod}/api/class/${this.state.class_id}/course/material/list`)
+		axios.get(`${config.prod}/api/class/${this.state.class_id}/topic/${this.props.user.id}/list`)
 			.then(response => {
 				this.setState({ data: response.data.data, isLoading: false });
 			})
@@ -98,27 +76,11 @@ class ListCourseMaterial extends React.Component {
             <Aux>
                 {this.state.isLoading && <Loader />}
 			    <Row>
-                    {this.state.showModal && 
-                        <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>Download Confirm</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>Are you sure to want to download <b>{this.state.title}</b>?</Modal.Body>
-                            <Modal.Footer>
-                                <Button variant="primary" onClick={() => this.handleDownload()}>
-                                    OK
-                                </Button>
-                                <Button variant="secondary" onClick={() => this.cancelDownload()}>
-                                    Cancel
-                                </Button>
-                            </Modal.Footer>
-                        </Modal>
-                    }
                     <NotificationContainer/>
                     <Col>
                         <Card>
                             <Card.Header>
-                                <Card.Title as="h5">Course Material List</Card.Title>
+                                <Card.Title as="h5">Class Specific Topics List</Card.Title>
                             </Card.Header>
                             <Card.Body>
                                 <Row>
@@ -128,7 +90,7 @@ class ListCourseMaterial extends React.Component {
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Title</th>
-                                                    <th>Created At</th>
+                                                    <th>Description</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
@@ -137,10 +99,10 @@ class ListCourseMaterial extends React.Component {
                                                     this.state.data.map((elem, i) => (
                                                         <tr key={i}>
                                                             <td>{i}</td>
-                                                            <td>{elem.title}</td>
-                                                            <td>{new Date(elem.createdAt).toString()}</td>
+                                                            <td>{elem.name}</td>
+                                                            <td style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{ elem.description }</td>
                                                             <td>
-                                                                <Button onClick={(e) => this.openDownloadModal(elem)} variant='primary'>Download</Button>
+                                                                <Button onClick={(e) => this.openDiscussionForum(elem)} variant='primary'>Open Forum</Button>
                                                             </td>
                                                         </tr>
                                                     ))
@@ -164,4 +126,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(ListCourseMaterial);
+export default connect(mapStateToProps, null)(ListTopic);

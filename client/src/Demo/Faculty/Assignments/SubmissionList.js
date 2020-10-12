@@ -233,7 +233,7 @@ class SubmissionList extends React.Component {
                                             <tbody>
                                                 {
                                                     this.state.data.map((elem, i) => (
-                                                        <tr>
+                                                        <tr key={i}>
                                                             <td>{elem.user.first_name}</td>
                                                             <td>{elem.user.last_name}</td>
                                                             <td>{elem.user.u_id}</td>

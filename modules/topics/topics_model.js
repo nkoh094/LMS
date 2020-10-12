@@ -23,6 +23,10 @@ const topics = db.sequelize.define('topics', {
     type: db.DataTypes.INTEGER,
     required: true 
   },
+  user_id: {
+    type: db.DataTypes.INTEGER,
+    required: true 
+  },
   is_deleted: {
     type: db.DataTypes.BOOLEAN,
     required: true,

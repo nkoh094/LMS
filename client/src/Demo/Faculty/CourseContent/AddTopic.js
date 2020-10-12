@@ -71,7 +71,7 @@ class AddTopic extends React.Component {
             return;
         }
        
-        axios.post(`${configs.prod}/api/topic/create`, { name: name.trim(), description: description.trim(), class_id, type: true })
+        axios.post(`${configs.prod}/api/topic/create`, { name: name.trim(), description: description.trim(), class_id, type: true, user_id: this.props.user.id })
             .then(response => {
                 this.props.history.push(`/faculty/class/list`);
             })

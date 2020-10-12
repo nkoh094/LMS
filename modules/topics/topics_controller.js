@@ -7,14 +7,14 @@ class Topics {
     createTopic() {
         return async (req, res) => { 
             
-            const { name, class_id, description, type } = req.body;
+            const { name, class_id, description, type, user_id } = req.body;
             
-            if (!req.body || !name ||!description) {
+            if (!req.body || !name ||!description ||!user_id) {
                 return res.status(400).send({ msg: 'Bad Request' });
             }
             
             try {
-                let topic = { name, description, type };
+                let topic = { name, description, type, user_id };
                 if (class_id) {
                     topic.class_id = class_id;
                 }
@@ -27,7 +27,27 @@ class Topics {
         }
     }
     
-    listTopic() {
+    listPrivateTopics() {
+        return async (req, res) => { 
+            
+            let { id, user_id } = req.params;
+            
+            if (!id ||!user_id) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+
+            try {
+                const result = await topicsModel.findAndCountAll({ where: { is_deleted: false, class_id: id, user_id } });
+                const { count, rows } = result;
+                return res.status(200).send({ count, data: rows });
+            } catch (err) {
+                console.log('Error in listing private topics from db', err);
+                return res.status(500).json({ msg: 'Internal Server Error', error: err });
+            }   
+        }
+    }
+
+    listGeneralTopics() {
         return async (req, res) => { 
             
             let { id } = req.params;
@@ -37,7 +57,7 @@ class Topics {
             }
 
             try {
-                const result = await topicsModel.findAndCountAll({ where: { is_deleted: false, class_id: id } });
+                const result = await topicsModel.findAndCountAll({ where: { is_deleted: false, type: false, user_id: id } });
                 const { count, rows } = result;
                 return res.status(200).send({ count, data: rows });
             } catch (err) {

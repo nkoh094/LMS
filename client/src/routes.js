@@ -31,7 +31,8 @@ const ListAssignment = React.lazy(() => import("./Demo/Faculty/Assignments/ListA
 const ListAssignmentSubmission = React.lazy(() => import("./Demo/Faculty/Assignments/SubmissionList"));
 const AddCourseMaterial = React.lazy(() => import("./Demo/Faculty/CourseMaterial/AddCourseMaterial"));
 const ListCourseMaterial = React.lazy(() => import("./Demo/Faculty/CourseMaterial/ListCourseMaterial"));
-
+const ListGeneralTopics = React.lazy(() => import("./Demo/Faculty/GeneralTopics/ListTopics"));
+const ListTopic = React.lazy(() => import("./Demo/Faculty/CourseContent/ListTopic"));
 
 //Users
 const UeserInterests = React.lazy(() => import("./Demo/Users/Interests/Interests"));
@@ -59,6 +60,9 @@ const routes = [
     { path: '/faculty/class/:id/assignment/:assign_id/submissions', exact: true, faculty: true, component: RequireAuth(ListAssignmentSubmission) },
     { path: '/faculty/class/:id/course/material/create', exact: true, faculty: true, component: RequireAuth(AddCourseMaterial) },
     { path: '/faculty/class/:id/course/material/list', exact: true, faculty: true, component: RequireAuth(ListCourseMaterial) },
+    { path: '/faculty/topic/general/list', exact: true, faculty: true, component: RequireAuth(ListGeneralTopics) },
+    { path: '/faculty/class/:id/topic/list', exact: true, faculty: true, component: RequireAuth(ListTopic) },
+    
 ];
 
 export default routes;

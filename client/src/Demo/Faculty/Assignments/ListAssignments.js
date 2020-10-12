@@ -140,7 +140,7 @@ class ListAssignment extends React.Component {
                                             <tbody>
                                                 {
                                                     this.state.data.map((elem, i) => (
-                                                        <tr>
+                                                        <tr key={i}>
                                                             <td>{elem.title}</td>
                                                             <td>{elem.total_marks}</td>
                                                             <td>{new Date(elem.submission_date).toString()}</td>

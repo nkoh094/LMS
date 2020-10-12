@@ -65,8 +65,11 @@ module.exports = function(app) {
   //Topic create
   app.post('/api/topic/create', Topics.createTopic());
 
-  //Topic list
-  app.get('/api/topic/:id/list', Topics.listTopic());
+  //Topic private list
+  app.get('/api/class/:id/topic/:user_id/list', Topics.listPrivateTopics());
+
+  //Topic general list
+  app.get('/api/topic/:id/list', Topics.listGeneralTopics());
 
   //Topic delete
   app.delete('/api/topic/delete', Topics.deleteTopic());

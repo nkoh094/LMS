@@ -56,6 +56,7 @@ Promise.all(promiseArray)
     Annoucements.belongsTo(classes);
     Annoucements.sync();
     Topics.belongsTo(classes);
+    Topics.belongsTo(users);
     Topics.sync();
     Assignments.belongsTo(classes);
     Assignments.sync();
