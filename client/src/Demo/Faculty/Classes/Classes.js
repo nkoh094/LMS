@@ -72,7 +72,11 @@ class Classes extends React.Component {
     listVideoLecture(value) {
         this.props.history.push(`/faculty/class/${value.id}/course/list`)
     }
-   
+
+    listStudentsEnrolled(value) {
+        this.props.history.push(`/faculty/class/${value.id}/students/list`)
+    }
+    
     openDeleteModal(value) {
 		this.setState({ isEdit: false, name: value.name, status: true, showModal: true, deletedRowId: value.id });
     }
@@ -134,7 +138,6 @@ class Classes extends React.Component {
         }
     };
 
-    
     cancelDelete() {
 		this.setState({ 
             isEdit: false,
@@ -185,6 +188,7 @@ class Classes extends React.Component {
                                                                 </p>
                                                                 <hr />
                                                             </div>
+                                                            <Button onClick={() => this.listStudentsEnrolled(elem)} variant="outline-primary" className="mr-2 mt-2"> View Students Enrolled </Button>
                                                             <Button onClick={() => this.listVideoLecture(elem)} variant="outline-primary" className="mr-2 mt-2"> View Lectures List </Button>
                                                             <Button onClick={() => this.addVideoLecture(elem)} variant="outline-primary" className="mr-2 mt-2"> Add Lecture </Button>
                                                             <Button onClick={() => this.addTopic(elem)} variant="outline-primary" className="mr-2 mt-2">Add Topic</Button>

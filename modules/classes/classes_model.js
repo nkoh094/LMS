@@ -15,9 +15,14 @@ const classes = db.sequelize.define('classes', {
     type: db.DataTypes.TEXT,
     required: true
   },
-  user_id: {
+  faculty_id: {
     type: db.DataTypes.INTEGER,
-    required: true 
+    allowNull: false,
+    references: {
+      model: "users",
+      key: "id"
+    },
+    required: true
   },
   is_deleted: {
     type: db.DataTypes.BOOLEAN,

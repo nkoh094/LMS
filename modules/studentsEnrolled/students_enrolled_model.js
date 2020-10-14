@@ -1,12 +1,7 @@
 const db = require ('../../config/db_config');
 
 const studentsEnrolled = db.sequelize.define('students_enrolled', {
-  id: {
-    type: db.DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  user_id: {
+  userid: {
     type: db.DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -15,7 +10,7 @@ const studentsEnrolled = db.sequelize.define('students_enrolled', {
       },
       required: true
   },
-  class_id: {
+  classid: {
     type: db.DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -23,12 +18,7 @@ const studentsEnrolled = db.sequelize.define('students_enrolled', {
       key: "id"
     },
     required: true
-  },
-  is_deleted: {
-    type: db.DataTypes.BOOLEAN,
-    required: true,
-    defaultValue: false
   }
-}, { underscored: true, timestamp: true, tableName: 'students_enrolled' });
+}, { timestamp: true, tableName: 'students_enrolled' });
 
 module.exports = studentsEnrolled;

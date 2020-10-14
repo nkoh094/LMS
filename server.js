@@ -51,40 +51,65 @@ Promise.all(promiseArray)
   .then(() => {
     socialLogins.belongsTo(users);
     users.hasOne(socialLogins);
-    classes.belongsTo(users);
-    socialLogins.sync();
-    classes.sync();
-    Lectures.belongsTo(classes);
-    Lectures.sync();
-    Annoucements.belongsTo(classes);
-    Annoucements.sync();
-    Topics.belongsTo(classes);
-    Topics.belongsTo(users);
-    Topics.sync();
-    Assignments.belongsTo(classes);
-    Assignments.sync();
-    AssignmentSubmission.belongsTo(users);
-    AssignmentSubmission.belongsTo(Assignments);
-    assignmentSubmission.sync();
-    
-    studentsEnrolled.sync();
-    classes.belongsToMany(users, { through: 'students_enrolled', foreignKey: "class_id" });
-    users.belongsToMany(classes, { through: "students_enrolled", foreignKey: "user_id" });
-    
-    Quiz.belongsTo(classes);
-    Quiz.sync();
-    quizOption.belongsTo(Quiz);
-    quizOption.sync();
+    let proc = [];
+    proc.push(socialLogins.sync());
+    proc.push(classes.sync());
+    Promise.all(proc)
+      .then(() => {
+       
+        Lectures.belongsTo(classes);
+        Annoucements.belongsTo(classes);
+        Topics.belongsTo(classes);
+        Topics.belongsTo(users);
+        Assignments.belongsTo(classes);
 
-    quizSubmission.belongsTo(users);
-    quizSubmission.belongsTo(Quiz);
-    quizSubmission.sync();
+        Quiz.belongsTo(classes);
+        courseMaterial.belongsTo(classes);
+        UserInterest.belongsTo(users);
+        UserInterest.belongsTo(interests);
+                       
+        let promises = [];
+        promises.push(Lectures.sync());
+        promises.push(Annoucements.sync());
+        promises.push(Topics.sync());
+        promises.push(Assignments.sync());
+        promises.push(Quiz.sync());
+        promises.push(courseMaterial.sync());
+        promises.push(UserInterest.sync());
+        promises.push(studentsEnrolled.sync());
 
-    courseMaterial.belongsTo(classes);
-    courseMaterial.sync();
-    UserInterest.belongsTo(users);
-    UserInterest.belongsTo(interests);
-    UserInterest.sync();
+        Promise.all(promises)
+          .then(() => {
+
+            classes.belongsToMany(users, { through: 'students_enrolled', foreignKey: "classid" });
+            users.belongsToMany(classes, { through: 'students_enrolled', foreignKey: "userid" });
+
+            AssignmentSubmission.belongsTo(users);
+            AssignmentSubmission.belongsTo(Assignments);
+            quizOption.belongsTo(Quiz);
+            quizSubmission.belongsTo(users);
+            quizSubmission.belongsTo(Quiz);
+           
+            let prom = [];
+            prom.push(assignmentSubmission.sync());
+            prom.push(quizOption.sync());
+            prom.push(quizSubmission.sync());
+
+            Promise.all(prom)
+              .then(() => {
+                console.log('Tables synced successfully');
+              })
+              .catch(err => {
+                console.log("Table Sync Error prom: ", err);
+              });
+          })
+          .catch(err => {
+            console.log("Table Sync Error Promises: ", err);
+          })
+      })
+      .catch(err => {
+        console.log("Table Sync Error Classes: ", err);
+      });
   })
   .catch(err => {
     console.log("Table Sync Error: ", err);

@@ -51,6 +51,9 @@ module.exports = function(app) {
   //Class list
   app.get('/api/class/:user/list', Classes.listClasses());
 
+  //Class Student list
+  app.get('/api/class/:class_id/student/list', Classes.listClassesStudent());
+
   //Class delete
   app.delete('/api/class/delete', Classes.deleteClass());
 
