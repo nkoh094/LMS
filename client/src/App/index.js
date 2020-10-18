@@ -9,6 +9,7 @@ import Aux from "../hoc/_Aux";
 import ScrollToTop from './layout/ScrollToTop';
 import routes from "../route";
 
+import MessageChat from 'react-messenger-customer-chat';
 
 const AdminLayout = Loadable({
     loader: () => import('./layout/AdminLayout'),
@@ -42,6 +43,10 @@ class App extends Component {
                         </Switch>
                     </Suspense>
                 </ScrollToTop>
+                <MessageChat
+                    pageId="406156429546294"
+                    appId="797442954129952"
+                />
             </Aux>
         );
     }
