@@ -11,6 +11,7 @@ const Annoucements = require('../modules/annoucements/annoucements_controller');
 const Assignments = require('../modules/assignments/assignments_controller');
 const CourseMaterial = require('../modules/courseMaterial/course_material_controller');
 const Quiz = require('../modules/quizes/quiz_controller');
+const Comment = require('../modules/comments/comments_controller');
 
 module.exports = function(app) {
   
@@ -125,4 +126,43 @@ module.exports = function(app) {
 
   //Quiz Submission Update 
   app.post('/api/class/quiz/submission/update', Quiz.submissionUpdate());
+
+  //users APIs
+
+  //list classes to users
+  app.get('/api/users/:user_id/class/list', Classes.listUserClasses());
+
+  //enroll student to class
+  app.post('/api/users/class/enroll', Classes.enrollStudent());
+
+  //student joined classes
+  app.get('/api/users/:user_id/class/joined/list', Classes.listUserJoinedClasses());
+  
+  //private topics list
+  app.get('/api/users/class/:id/topic/list', Topics.listUserPrivateTopics());
+
+  //general topics list
+  app.get('/api/users/general/topic/list', Topics.listUserGeneralTopics());
+  
+  //user quiz list
+  app.get('/api/users/:user_id/class/:id/quiz/list', Quiz.listUserQuiz());
+
+  //user quiz list
+  app.get('/api/users/:user_id/class/:id/assignment/list', Assignments.listUserAssignment());
+
+  //submit Assignment
+  app.post('/api/users/class/assignment/submit', uploader.upload.single('assignment-submit'), Assignments.submitAssignment());
+  
+  //get private topic for discussion
+  app.get('/api/users/:class_id/topic/:id/private', Topics.getPrivateTopic());
+  
+  //get private topic for discussion
+  app.get('/api/users/topic/:id/general', Topics.getGeneralTopic());
+  
+  //create comment
+  app.post('/api/comment/create', Comment.createComment());
+  
+  app.get('/api/users/class/:class_id/quiz/:quiz_id/submission', Quiz.getUserQuiz());
+  
+  app.post('/api/users/quiz/submit', Quiz.submitQuiz());
 };

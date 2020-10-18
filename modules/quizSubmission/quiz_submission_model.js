@@ -15,6 +15,10 @@ const quizSubmission = db.sequelize.define('quiz_submission', {
       },
       required: true
   },
+  submission: {
+    type: db.DataTypes.TEXT,
+    required: true
+  },
   quize_id: {
     type: db.DataTypes.INTEGER,
     allowNull: false,

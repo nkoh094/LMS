@@ -40,12 +40,21 @@ const StudentsEnrolled = React.lazy(() => import("./Demo/Faculty/CourseContent/L
 
 //Users
 const UeserInterests = React.lazy(() => import("./Demo/Users/Interests/Interests"));
-
+const UserClasses = React.lazy(() => import("./Demo/Users/Classes/ListClasses"));
+const EnrolledClassList = React.lazy(() => import("./Demo/Users/Classes/ListJoinedClasses"));
+const UserLectures = React.lazy(() => import("./Demo/Users/Classes/ListLectures"));
+const UserAnnoucements = React.lazy(() => import("./Demo/Users/Classes/ListAnnoucements"));
+const UserAssignments = React.lazy(() => import("./Demo/Users/Classes/ListAssignments"));
+const UserCourseMaterial = React.lazy(() => import("./Demo/Users/Classes/ListCourseMaterial"));
+const UserPrivateTopics = React.lazy(() => import("./Demo/Users/Classes/ListTopics"));
+const UserGeneralTopics = React.lazy(() => import("./Demo/Users/GeneralTopics/ListGeneralTopics"));
+const UserQuizes = React.lazy(() => import("./Demo/Users/Classes/ListQuiz"));
+const UserPrivateDiscussion = React.lazy(() => import("./Demo/Users/Classes/DiscusionForum"));
+const UserGeneralDiscussion = React.lazy(() => import("./Demo/Users/GeneralTopics/DiscussionForm"));
+const UserQuiz = React.lazy(() => import("./Demo/Users/Classes/Quiz"));
 
 const routes = [
     { path: '/verify/identity', exact: true, user: true, faculty: true, component: RequireAuth(VerifyIdentity) },
-    { path: '/dashboard', exact: true, user: true, faculty: false, component: RequireAuth(Dashboard) },
-    { path: '/interests', exact: true, user: true, component: RequireAuth(UeserInterests) },
     { path: '/home', exact: true, user: false, faculty: true, component: RequireAuth(FacultyDashboard) },
     { path: '/admin/dashboard', exact: true, admin: true, component: RequireAuth(AdminDashboard) },
     { path: '/admin/interest', exact: true, admin: true, component: RequireAuth(Interest) },
@@ -70,7 +79,24 @@ const routes = [
     { path: '/faculty/class/:id/quiz/list', exact: true, faculty: true, component: RequireAuth(ListQuiz) },
     { path: '/faculty/class/:id/quiz/:assign_id/submissions', exact: true, faculty: true, component: RequireAuth(QuizSubmissionList) },
     { path: '/faculty/class/:id/students/list', exact: true, faculty: true, component: RequireAuth(StudentsEnrolled) },
+    { path: '/faculty/class/:class_id/topic/:id/discussion', exact: true, faculty: true, component: RequireAuth(UserPrivateDiscussion) },
+    { path: '/faculty/general/topic/:id/discussion', exact: true, faculty: true, component: RequireAuth(UserGeneralDiscussion) },
     
+    //users routes
+    { path: '/dashboard', exact: true, user: true, faculty: false, component: RequireAuth(Dashboard) },
+    { path: '/interests', exact: true, user: true, component: RequireAuth(UeserInterests) },
+    { path: '/class/list', exact: true, user: true, component: RequireAuth(UserClasses) },
+    { path: '/enrolled/class/list', exact: true, user: true, component: RequireAuth(EnrolledClassList) },
+    { path: '/user/class/:id/lectures/list', exact: true, user: true, component: RequireAuth(UserLectures) },
+    { path: '/user/class/:id/annoucements/list', exact: true, user: true, component: RequireAuth(UserAnnoucements) },
+    { path: '/user/class/:id/assignments/list', exact: true, user: true, component: RequireAuth(UserAssignments) },
+    { path: '/user/class/:id/course/material/list', exact: true, user: true, component: RequireAuth(UserCourseMaterial) },
+    { path: '/user/class/:id/topics/list', exact: true, user: true, component: RequireAuth(UserPrivateTopics) },
+    { path: '/user/general/topics/list', exact: true, user: true, component: RequireAuth(UserGeneralTopics) },
+    { path: '/user/class/:id/quiz/list', exact: true, user: true, component: RequireAuth(UserQuizes) },
+    { path: '/user/class/:class_id/topic/:id/discussion', exact: true, user: true, component: RequireAuth(UserPrivateDiscussion) },
+    { path: '/user/general/topic/:id/discussion', exact: true, user: true, component: RequireAuth(UserGeneralDiscussion) },
+    { path: '/user/class/:class_id/quiz/:id/submission', exact: true, user: true, component: RequireAuth(UserQuiz) },
 ];
 
 export default routes;

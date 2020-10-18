@@ -30,7 +30,7 @@ class ListTopic extends React.Component {
     }
     
     openDiscussionForum(value) {
-        alert("Opening");
+        this.props.history.push(`/faculty/class/${this.state.class_id}/topic/${value.id}/discussion`);
     }
 
     getTopicsList() {

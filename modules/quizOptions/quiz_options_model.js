@@ -24,7 +24,7 @@ const quizOption = db.sequelize.define('quiz_options', {
   correct_option: {
     type: db.DataTypes.STRING
   },
-  quiz_id: {
+  quize_id: {
     type: db.DataTypes.INTEGER
   },
   is_deleted: {

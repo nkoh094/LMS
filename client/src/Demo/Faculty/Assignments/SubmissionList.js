@@ -79,18 +79,18 @@ class SubmissionList extends React.Component {
             this.getSubmissionList();
           })
           .catch(err => {
-            console.log('Error: ', err.response);
-            if (err.response && err.response.status && (err.response.status === 400 || err.response.status === 500)) {
-                if (err.response.status === 500) {
-                    this.setState({ isValid: { value: true, text: 'Internal Server Error', name:'server_error' }, showModalMarks: true });
+                console.log('Error: ', err.response);
+                if (err.response && err.response.status && (err.response.status === 400 || err.response.status === 500)) {
+                    if (err.response.status === 500) {
+                        this.setState({ isValid: { value: true, text: 'Internal Server Error', name:'server_error' }, showModalMarks: true });
+                    } else {
+                        this.setState({ isValid: { value: true, text: err.response.data.msg, name:'server_error' }, showModalMarks: true });
+                    }
                 } else {
-                    this.setState({ isValid: { value: true, text: err.response.data.msg, name:'server_error' }, showModalMarks: true });
+                    this.setState({ isValid: { value: true, text: 'Unknown Error', name:'server_error' }, showModalMarks: true });
+                    //this.createNotification('error', 'Unknown Error');
                 }
-            } else {
-                this.setState({ isValid: { value: true, text: 'Unknown Error', name:'server_error' }, showModalMarks: true });
-                //this.createNotification('error', 'Unknown Error');
-            }
-        });
+            });
     }
 
     componentDidMount = async () => {

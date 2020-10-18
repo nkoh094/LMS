@@ -19,6 +19,34 @@ export default {
                     type: 'item',
                     url: '/interests',
                     icon: 'feather icon-home',
+                },
+                {
+                    id: 'classes',
+                    title: 'Available Classes',
+                    type: 'item',
+                    url: '/class/list',
+                    icon: 'feather icon-home',
+                },
+                {
+                    id: 'classes_enrolled',
+                    title: 'Enrolled Classes',
+                    type: 'item',
+                    url: '/enrolled/class/list',
+                    icon: 'feather icon-home',
+                },
+                {
+                    id: 'user_topics',
+                    title: 'General Topics',
+                    type: 'collapse',
+                    icon: 'feather icon-box',
+                    children: [
+                        {
+                            id: 'listUserTopics',
+                            title: 'List',
+                            type: 'item',
+                            url: '/user/general/topics/list'
+                        }
+                    ]
                 }
             ]
         }

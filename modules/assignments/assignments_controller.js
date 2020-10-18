@@ -27,7 +27,28 @@ class Assignment {
             }
         }
     }
-    
+
+    submitAssignment() {
+        return async (req, res) => { 
+            
+            const { user_id, assign_id, } = req.body;
+            const file = req.file;
+            if (!req.body || !user_id ||!assign_id ||!file) {
+                this.removeImage(file.filename).then().catch();
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+            
+            try {
+                const result = await submissionModel.create({ user_id, assignment_id: assign_id, file: file.filename });
+                return res.status(200).json({ msg: 'Assignment Submitted Successfully' });
+            } catch (err) {
+                console.log('Error in creating assignment: ', err);
+                this.removeImage(file.filename).then().catch();
+                return res.status(500).json({ msg: 'Internal Server Error', error: err });
+            }
+        }
+    }
+
     listAssignment() {
         return async (req, res) => { 
             
@@ -43,6 +64,32 @@ class Assignment {
                 return res.status(200).send({ count, data: rows });
             } catch (err) {
                 console.log('Error in listing assignments from db', err);
+                return res.status(500).json({ msg: 'Internal Server Error', error: err });
+            }   
+        }
+    }
+
+    listUserAssignment() {
+        return async (req, res) => { 
+            
+            let { id, user_id } = req.params;
+            
+            if (!id) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+
+            try {
+                const result = await assignmentModel.findAndCountAll({ where: { is_deleted: false, class_id: id }, include: [ submissionModel ] });
+                let { count, rows } = result;
+                rows = JSON.parse(JSON.stringify(rows));
+                let newRows = [];
+                rows.forEach(elem => {
+                    let filtered = elem.assignment_submissions.filter(x => x.user_id == user_id);
+                    newRows.push({...elem, assignment_submissions : filtered.length ? filtered[0] : {} });
+                });
+                return res.status(200).send({ count, data: newRows });
+            } catch (err) {
+                console.log('Error in listing user assignments from db', err);
                 return res.status(500).json({ msg: 'Internal Server Error', error: err });
             }   
         }

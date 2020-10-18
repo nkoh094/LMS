@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Table, Button, Modal, Card, Form } from 'react-bootstrap';
+import { Row, Col, Table, Card } from 'react-bootstrap';
 import Aux from "../../../hoc/_Aux";
 import axios from 'axios';
 import config from '../../../config';

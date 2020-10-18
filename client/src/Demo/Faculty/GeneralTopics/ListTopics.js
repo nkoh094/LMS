@@ -27,7 +27,7 @@ class ListTopics extends React.Component {
     }
     
     openDiscussionForum(value) {
-        alert("Opening");
+        this.props.history.push(`/faculty/general/topic/${value.id}/discussion`);
     }
 
     getTopicsList() {
