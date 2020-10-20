@@ -114,11 +114,21 @@ class SubmissionList extends React.Component {
     cancelMarks() {
 		this.setState({ showModalMarks: false, isValid: { value: false } });
     }
+
+    goBack(e) {
+        e.preventDefault();
+        this.props.history.push(`/faculty/class/${this.state.class_id}/quiz/list`);
+    }
     
     render() {
         return (
             <Aux>
                 {this.state.isLoading && <Loader />}
+                <Row>
+                    <Col>
+                        <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                    </Col>
+                </Row>
 			    <Row>
                     { this.state.showModalMarks && 
                         <Modal show={this.state.showModalMarks} onHide={() => this.setState({ showModalMarks: false, isValid: { value: false } })}>

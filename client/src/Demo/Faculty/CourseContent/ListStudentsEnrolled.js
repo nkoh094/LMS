@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Table, Card } from 'react-bootstrap';
+import { Row, Col, Table, Card, Button } from 'react-bootstrap';
 import Aux from "../../../hoc/_Aux";
 import axios from 'axios';
 import config from '../../../config';
@@ -78,10 +78,20 @@ class ListStudentsEnrolled extends React.Component {
 		this.setState({ showModalMarks: false, isValid: { value: false } });
     }
     
+    goBack(e) {
+        e.preventDefault();
+        this.props.history.push(`/faculty/class/list`);
+    }
+
     render() {
         return (
             <Aux>
                 {this.state.isLoading && <Loader />}
+                <Row>
+                    <Col>
+                        <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                    </Col>
+                </Row>
 			    <Row>
                     <NotificationContainer/>
                     <Col>

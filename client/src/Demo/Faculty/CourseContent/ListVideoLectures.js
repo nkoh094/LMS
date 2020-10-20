@@ -94,7 +94,12 @@ class ListVideoLectures extends React.Component {
 			name: ''
 		});
     }
-    
+
+    goBack(e) {
+        e.preventDefault();
+        this.props.history.push(`/faculty/class/list`);
+    }
+
     render() {
         return (
             <Aux>
@@ -116,6 +121,11 @@ class ListVideoLectures extends React.Component {
                     </Modal>
 				}
                 <Row>
+                    <Col>
+                        <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                    </Col>
+                </Row>
+                <Row>
                     <NotificationContainer/>
                     <Col>
                         <Card>
@@ -129,7 +139,7 @@ class ListVideoLectures extends React.Component {
                                             this.state.data.map((elem, i) => (
                                                 <Col key={elem.id}>
                                                     <Card>
-                                                        <Card.Header><b># {i+1}: {elem.name}</b></Card.Header>
+                                                        <Card.Header as='h4' style={{ fontFamily: 'cursive' }}><b># {i+1}: {elem.name}</b></Card.Header>
                                                         <Card.Body>
                                                             <Row>
                                                                 <Col sm={6}>

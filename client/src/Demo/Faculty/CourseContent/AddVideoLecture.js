@@ -118,6 +118,11 @@ class AddVideoLecture extends React.Component {
             });
     }
 
+    goBack(e) {
+        e.preventDefault();
+        this.props.history.push(`/faculty/class/list`);
+    }
+    
     render() {
         const filePreview = this.state.files.map(file => (
             <video key={file.name} controls style={{ maxWidth: '100%', maxHeight: '100%' }}>
@@ -129,6 +134,11 @@ class AddVideoLecture extends React.Component {
         return (
             <Aux>
                 {this.state.isLoading && <Loader />}
+                <Row>
+                    <Col>
+                        <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                    </Col>
+                </Row>
 				<Row>
                     <NotificationContainer/>
                     <Col>

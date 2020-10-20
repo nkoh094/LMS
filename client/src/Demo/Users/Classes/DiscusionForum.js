@@ -88,10 +88,24 @@ class DiscusionForum extends React.Component {
         
     }
 
+    goBack(e) {
+        e.preventDefault();
+        if (this.props.user.role === 'user') {
+            this.props.history.push(`/user/class/${this.state.class_id}/topics/list`);
+        } else {
+            this.props.history.push(`/faculty/class/${this.state.class_id}/topic/list`);
+        }
+    }
+    
     render() {
         return (
             <Aux>
                 {this.state.isLoading && <Loader />}
+                <Row>
+                    <Col>
+                        <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                    </Col>
+                </Row>
 			    <Row>
                     <NotificationContainer/>
                     <Col>
@@ -105,8 +119,8 @@ class DiscusionForum extends React.Component {
                                         <Row>
                                             <Col>
                                                 <Card>
-                                                    <Card.Body>
-                                                        <p>{ this.state.data.description ? this.state.data.description : null }</p>
+                                                    <Card.Body style={{ fontFamily: 'cursive' }}>
+                                                        <p><b>{ this.state.data.description ? this.state.data.description : null }</b></p>
                                                     </Card.Body>  
                                                 </Card>
                                             </Col>
@@ -118,8 +132,8 @@ class DiscusionForum extends React.Component {
                                                         <Col>
                                                             <Card>
                                                                 <Card.Header>
-                                                                    <Card.Title as='h6'>
-                                                                        { `${elem.user.first_name} ${elem.user.last_name}` }
+                                                                    <Card.Title as='h4' style={{ fontFamily: 'cursive' }}>
+                                                                       <b> { `${elem.user.first_name} ${elem.user.last_name}` } </b>
                                                                     </Card.Title>
                                                                 </Card.Header>
                                                                 <Card.Body>

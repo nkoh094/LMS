@@ -106,7 +106,7 @@ class ListJoinedClasses extends React.Component {
                                         this.state.data.map(elem => (
                                             <Col key={elem.id} lg={6}>
                                                 <Card>
-                                                    <Card.Header>{elem.name}</Card.Header>
+                                                    <Card.Header as='h4' style={{ fontFamily: 'cursive' }}><b>{elem.name}</b></Card.Header>
                                                     <Card.Body>
                                                         <Row>
                                                             <Col>

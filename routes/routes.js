@@ -153,6 +153,9 @@ module.exports = function(app) {
   //submit Assignment
   app.post('/api/users/class/assignment/submit', uploader.upload.single('assignment-submit'), Assignments.submitAssignment());
   
+  //submit Assignment
+  app.post('/api/users/class/assignment/resubmit', uploader.upload.single('assignment-submit'), Assignments.resubmitAssignment());
+  
   //get private topic for discussion
   app.get('/api/users/:class_id/topic/:id/private', Topics.getPrivateTopic());
   

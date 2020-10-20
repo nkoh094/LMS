@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button, Modal } from 'react-bootstrap';
+import { Row, Col, Card, Button, Modal, Navbar, Container } from 'react-bootstrap';
 import Aux from "../../../hoc/_Aux";
 import axios from 'axios';
 import config from '../../../config';
@@ -63,11 +63,21 @@ class ListVideoLectures extends React.Component {
         }
     };
     
+    goBack(e) {
+        e.preventDefault();
+        this.props.history.push('/enrolled/class/list');
+    }
+
     render() {
         return (
             <Aux>
                 {this.state.isLoading && <Loader />}
-			    <Row>
+                <Row>
+                    <Col>
+                        <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                    </Col>
+                </Row>
+                <Row>
                     <NotificationContainer/>
                     <Col>
                         <Card>

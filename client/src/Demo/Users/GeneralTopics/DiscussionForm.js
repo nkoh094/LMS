@@ -88,10 +88,24 @@ class DiscusionForum extends React.Component {
         
     }
 
+    goBack(e) {
+        e.preventDefault();
+        if (this.props.user.role === 'user') {
+            this.props.history.push('/user/general/topics/list');
+        } else {
+            this.props.history.push('/faculty/topic/general/list');
+        }
+    }    
+
     render() {
         return (
             <Aux>
                 {this.state.isLoading && <Loader />}
+                <Row>
+                    <Col>
+                        <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                    </Col>
+                </Row>
 			    <Row>
                     <NotificationContainer/>
                     <Col>

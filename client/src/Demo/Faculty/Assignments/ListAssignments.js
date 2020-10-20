@@ -98,10 +98,20 @@ class ListAssignment extends React.Component {
 		});
     }
     
+    goBack(e) {
+        e.preventDefault();
+        this.props.history.push(`/faculty/class/list`);
+    }
+
     render() {
         return (
             <Aux>
                 {this.state.isLoading && <Loader />}
+                <Row>
+                    <Col>
+                        <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                    </Col>
+                </Row>
 			    <Row>
                     {this.state.showModal && 
                         <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>

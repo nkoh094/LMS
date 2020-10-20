@@ -136,6 +136,11 @@ class AddAssignments extends React.Component {
                 }
             });
     }
+    
+    goBack(e) {
+        e.preventDefault();
+        this.props.history.push(`/faculty/class/list`);
+    }
 
     render() {
         const filePreview = this.state.files.map(file => (
@@ -149,6 +154,11 @@ class AddAssignments extends React.Component {
         return (
             <Aux>
                 {this.state.isLoading && <Loader />}
+                <Row>
+                    <Col>
+                        <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                    </Col>
+                </Row>
 				<Row>
                     <NotificationContainer/>
                     <Col>

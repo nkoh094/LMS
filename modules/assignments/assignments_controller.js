@@ -49,6 +49,34 @@ class Assignment {
         }
     }
 
+    resubmitAssignment() {
+        return async (req, res) => { 
+            
+            const { user_id, assign_id, } = req.body;
+            const file = req.file;
+            if (!req.body || !user_id ||!assign_id ||!file) {
+                this.removeImage(file.filename).then().catch();
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+            
+            try {
+                const result = await submissionModel.findOne({ where: { user_id, assignment_id: assign_id } });
+                if (result) {
+                    this.removeImage(result.file).then().catch();
+                    const result1 = await result.update({ file: file.filename });
+                    return res.status(200).json({ msg: 'Assignment ReSubmitted Successfully' });
+                } else {
+                    this.removeImage(file.filename).then().catch();
+                    return res.status(404).json({ msg: 'Assignment Not found' });
+                }
+            } catch (err) {
+                console.log('Error in updating resubmit assignment: ', err);
+                this.removeImage(file.filename).then().catch();
+                return res.status(500).json({ msg: 'Internal Server Error', error: err });
+            }
+        }
+    }
+
     listAssignment() {
         return async (req, res) => { 
             
