@@ -14,6 +14,10 @@ class ListCourseMaterial extends React.Component {
         super(props);
         this.state = {
             isLoading: false,
+            deletedRowId: null,
+			showModalDelete: false,
+            handleCloseModal: false,
+            name: '',
             downloadRowId: null,
             elem: {}, 
 			showModal: false,
@@ -47,6 +51,27 @@ class ListCourseMaterial extends React.Component {
           });
     }
 
+    openDeleteModal(value) {
+		this.setState({ name: value.title, status: true, showModalDelete: true, deletedRowId: value.id });
+    }
+    
+	closeDeleteModal() {
+		this.setState({ showModalDelete: false });
+    }
+
+    handleDelete() {
+        this.setState({ showModalDelete: false, isLoading: true });
+		axios.delete(`${config.prod}/api/class/material/delete`, { data: { material_id: this.state.deletedRowId } })
+			.then(response => {
+				this.createNotification('success', 'Course Material Deleted Successfully');
+				this.getCourseMaterialList();
+			})
+			.catch(err => {
+				this.setState({ isLoading: false, name: '' });
+				console.log('Error: deleting data from db ', err.response);
+                this.createNotification('error', 'Error while deleting data from db');
+			});
+    }
 
     componentDidMount = async () => {
         if (this.props && this.props.user && this.props.user.id && this.props.match && this.props.match.params && this.props.match.params.id) {
@@ -93,6 +118,14 @@ class ListCourseMaterial extends React.Component {
 		});
     }
 
+    cancelDelete() {
+		this.setState({ 
+            isEdit: false,
+            showModalDelete: false,
+			name: ''
+		});
+    }
+    
     goBack(e) {
         e.preventDefault();
         this.props.history.push(`/faculty/class/list`);
@@ -125,6 +158,22 @@ class ListCourseMaterial extends React.Component {
                         </Modal>
                     }
                     <NotificationContainer/>
+                    {this.state.showModalDelete && 
+                        <Modal show={this.state.showModalDelete} onHide={() => this.setState({ showModalDelete: false })}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Delete Confirm</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>Are you sure to want to delete <b>{this.state.name}</b> </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="primary" onClick={() => this.handleDelete()}>
+                                    OK
+                                </Button>
+                                <Button variant="secondary" onClick={() => this.cancelDelete()}>
+                                    Cancel
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
+                    }
                     <Col>
                         <Card>
                             <Card.Header>
@@ -151,7 +200,8 @@ class ListCourseMaterial extends React.Component {
                                                             <td>{new Date(elem.createdAt).toString()}</td>
                                                             <td>
                                                                 <Button onClick={(e) => this.openDownloadModal(elem)} variant='primary'>Download</Button>
-                                                            </td>
+                                                                <Button onClick={(e) => this.openDeleteModal(elem)} variant='outline-danger'>Delete</Button>
+                                                           </td>
                                                         </tr>
                                                     ))
                                                 }

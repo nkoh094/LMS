@@ -46,6 +46,31 @@ class CourseMaterial {
         }
     }
 
+    deleteCourseMaterial() {
+        return async (req, res) => {
+
+            const { material_id } = req.body;
+
+            if (!req.body || !material_id) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+
+            try {
+                const material = await courseMaterialModel.findOne({ where: { id: material_id } });
+                if (material) {
+                    const result = await courseMaterialModel.destroy({ where: { id: material.id } });
+                    this.removeImage(material.file).then().catch();
+                    return res.status(200).json({ msg: 'Course Material Deleted Successfully' });
+                } else {
+                    return res.status(404).send({ msg: 'Course Material not found.' });
+                }
+            } catch (err) {
+                console.log('Error in deleting course material from db', err);
+                return res.status(500).json({ msg: 'Internal Server Error', error: err });
+            }
+        }
+    }
+
     removeImage(path) {
         return new Promise((rsv, rej) => {
             fs.unlink(`public/uploads/${path}`, (err) => {

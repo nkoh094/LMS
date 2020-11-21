@@ -115,6 +115,9 @@ module.exports = function(app) {
   //Course Material List 
   app.get('/api/class/:id/course/material/list', CourseMaterial.listCourseMaterial());
 
+  //Course Material Delete 
+  app.delete('/api/class/material/delete', CourseMaterial.deleteCourseMaterial());
+
   //Quiz create
   app.post('/api/class/quiz/create', Quiz.createQuiz());
 
