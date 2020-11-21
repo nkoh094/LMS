@@ -26,20 +26,19 @@ class ListVideoLectures extends React.Component {
     }
 
     openDeleteModal(value) {
-		this.setState({ isEdit: false, name: value.name, status: true, showModal: true, deletedRowId: value.id });
+		this.setState({ name: value.name, status: true, showModal: true, deletedRowId: value.id });
     }
     
 	closeDeleteModal() {
 		this.setState({ showModal: false });
     }
-    
+
     handleDelete() {
         this.setState({ showModal: false, isLoading: true });
-		axios.delete(`${config.prod}/api/class/delete`, { data: { class_id: this.state.deletedRowId } })
+		axios.delete(`${config.prod}/api/class/lecture/delete`, { data: { lecture_id: this.state.deletedRowId } })
 			.then(response => {
-				this.createNotification('success', 'Class Deleted Successfully');
+				this.createNotification('success', 'Lecture Deleted Successfully');
 				this.getLecturesList();
-				this.setState({ isLoading: false, name: '' });
 			})
 			.catch(err => {
 				this.setState({ isLoading: false, name: '' });
@@ -139,7 +138,10 @@ class ListVideoLectures extends React.Component {
                                             this.state.data.map((elem, i) => (
                                                 <Col key={elem.id}>
                                                     <Card>
-                                                        <Card.Header as='h4' style={{ fontFamily: 'cursive' }}><b># {i+1}: {elem.name}</b></Card.Header>
+                                                        <Card.Header as='h4' style={{ fontFamily: 'cursive' }}>
+                                                            <b># {i+1}: {elem.name}</b>
+                                                            <Button style={{ float: 'right' }} onClick={(e) => this.openDeleteModal(elem) } variant='outline-danger'>Delete</Button>
+                                                        </Card.Header>
                                                         <Card.Body>
                                                             <Row>
                                                                 <Col sm={6}>

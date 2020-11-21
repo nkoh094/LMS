@@ -49,15 +49,21 @@ class Lectures {
     deleteLecture() {
         return async (req, res) => {
 
-            const { class_id } = req.body;
+            const { lecture_id } = req.body;
 
-            if (!req.body || !class_id) {
+            if (!req.body || !lecture_id) {
                 return res.status(400).send({ msg: 'Bad Request' });
             }
 
             try {
-                const result = await lectureModel.update({ is_deleted: true }, { where: { id: class_id } });
-                return res.status(200).json({ msg: 'Lecture Deleted Successfully' });
+                const lecture = await lectureModel.findOne({ where: { id: lecture_id } });
+                if (lecture) {
+                    const result = await lectureModel.destroy({ where: { id: lecture.id } });
+                    this.removeImage(lecture.file).then().catch();
+                    return res.status(200).json({ msg: 'Lecture Deleted Successfully' });
+                } else {
+                    return res.status(404).send({ msg: 'Lecuture not found.' });
+                }
             } catch (err) {
                 console.log('Error in deleting class from db', err);
                 return res.status(500).json({ msg: 'Internal Server Error', error: err });
