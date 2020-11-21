@@ -150,7 +150,8 @@ class Topics {
             }
 
             try {
-                const result = await topicsModel.update({ is_deleted: true }, { where: { id: topic_id } });
+                const resultTopicComment = await commentModel.destroy({ where: { topic_id } });
+                const result = await topicsModel.destroy({ where: { id: topic_id } });
                 return res.status(200).json({ msg: 'Topic Deleted Successfully' });
             } catch (err) {
                 console.log('Error in deleting topic from db', err);

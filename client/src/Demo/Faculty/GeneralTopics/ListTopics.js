@@ -13,6 +13,9 @@ class ListTopics extends React.Component {
         super(props);
         this.state = {
             isLoading: false,
+            deletedRowId: null,
+			showModal: false,
+			handleCloseModal: false,
             isValid: {
                 value: false,
                 text: ''   
@@ -28,6 +31,28 @@ class ListTopics extends React.Component {
     
     openDiscussionForum(value) {
         this.props.history.push(`/faculty/general/topic/${value.id}/discussion`);
+    }
+
+    openDeleteModal(value) {
+		this.setState({ name: value.name, status: true, showModal: true, deletedRowId: value.id });
+    }
+    
+	closeDeleteModal() {
+		this.setState({ showModal: false });
+    }
+
+    handleDelete() {
+        this.setState({ showModal: false, isLoading: true });
+		axios.delete(`${config.prod}/api/class/topic/delete`, { data: { topic_id: this.state.deletedRowId } })
+			.then(response => {
+				this.createNotification('success', 'Topic Deleted Successfully');
+				this.getTopicsList();
+			})
+			.catch(err => {
+				this.setState({ isLoading: false, name: '' });
+				console.log('Error: deleting data from db ', err.response);
+                this.createNotification('error', 'Error while deleting data from db');
+			});
     }
 
     getTopicsList() {
@@ -61,10 +86,11 @@ class ListTopics extends React.Component {
         }
     };
 
-    cancelDownload() {
+    cancelDelete() {
 		this.setState({ 
+            isEdit: false,
             showModal: false,
-			title: ''
+			name: ''
 		});
     }
     
@@ -74,6 +100,22 @@ class ListTopics extends React.Component {
                 {this.state.isLoading && <Loader />}
 			    <Row>
                     <NotificationContainer/>
+                    {this.state.showModal && 
+                        <Modal show={this.state.showModal} onHide={() => this.setState({ showModal: false })}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Delete Confirm</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>Are you sure to want to delete <b>{this.state.name}</b> </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="primary" onClick={() => this.handleDelete()}>
+                                    OK
+                                </Button>
+                                <Button variant="secondary" onClick={() => this.cancelDelete()}>
+                                    Cancel
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
+                    }
                     <Col>
                         <Card>
                             <Card.Header>
@@ -100,6 +142,7 @@ class ListTopics extends React.Component {
                                                             <td style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>{elem.description}</td>
                                                             <td>
                                                                 <Button onClick={(e) => this.openDiscussionForum(elem)} variant='primary'>Open Forum</Button>
+                                                                <Button onClick={(e) => this.openDeleteModal(elem)} variant='outline-danger'>Delete</Button>
                                                             </td>
                                                         </tr>
                                                     ))

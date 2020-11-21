@@ -77,7 +77,7 @@ module.exports = function(app) {
   app.get('/api/topic/:id/list', Topics.listGeneralTopics());
 
   //Topic delete
-  app.delete('/api/topic/delete', Topics.deleteTopic());
+  app.delete('/api/class/topic/delete', Topics.deleteTopic());
   
    //user interest create
   app.post('/api/user/interest/create', UserInterest.createInterest());
