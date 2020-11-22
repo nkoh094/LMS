@@ -124,6 +124,9 @@ module.exports = function(app) {
   //Quiz List 
   app.get('/api/class/:id/quiz/list', Quiz.listQuiz());
   
+  //Quiz Delete 
+  app.delete('/api/class/quiz/delete', Quiz.deleteQuiz());
+  
   //Quiz Submission List 
   app.get('/api/class/quiz/:id/submission/list', Quiz.submissionList());
 

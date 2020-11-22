@@ -147,6 +147,27 @@ class Quiz {
         }
     }
 
+    deleteQuiz() {
+        return async (req, res) => {
+
+            const { quiz_id } = req.body;
+
+            if (!req.body || !quiz_id) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+
+            try {
+                const resultOption = await quizOptionModel.destroy({ where: { quize_id: quiz_id } });
+                const resultSubmission = await submissionModel.destroy({ where: { quize_id: quiz_id } });
+                const result = await quizModel.destroy({ where: { id: quiz_id } });
+                return res.status(200).json({ msg: 'Quiz Deleted Successfully' });
+            } catch (err) {
+                console.log('Error in deleting class from db', err);
+                return res.status(500).json({ msg: 'Internal Server Error', error: err });
+            }
+        }
+    }
+
     listUserQuiz() {
         return async (req, res) => { 
             
