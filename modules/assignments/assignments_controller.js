@@ -143,6 +143,35 @@ class Assignment {
         }
     }
 
+    deleteAssignment() {
+        return async (req, res) => {
+
+            const { assign_id } = req.body;
+
+            if (!req.body || !assign_id) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+
+            try {
+                const assignment = await assignmentModel.findOne({ where: { id: assign_id }, include: [ submissionModel ] });
+                if (assignment) {
+                    assignment.assignment_submissions.forEach(elem => {
+                        this.removeImage(elem.file).then().catch();
+                    });
+                    const resultSubmission = await submissionModel.destroy({ where: { assignment_id: assignment.id } });
+                    const result = await assignmentModel.destroy({ where: { id: assignment.id } });
+                    this.removeImage(assignment.file).then().catch();
+                    return res.status(200).json({ msg: 'Assignment Deleted Successfully' });
+                } else {
+                    return res.status(404).send({ msg: 'Assignment not found.' });
+                }
+            } catch (err) {
+                console.log('Error in deleting assignment from db', err);
+                return res.status(500).json({ msg: 'Internal Server Error', error: err });
+            }
+        }
+    }
+    
     submissionUpdate() {
         return async (req, res) => {
 

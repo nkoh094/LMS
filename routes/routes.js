@@ -103,6 +103,9 @@ module.exports = function(app) {
   //Assignment List 
   app.get('/api/class/:id/assignment/list', Assignments.listAssignment());
 
+  //Assignment List 
+  app.delete('/api/class/assignment/delete', Assignments.deleteAssignment());
+
   //Assignment Submission List 
   app.get('/api/class/assignment/:id/submission/list', Assignments.submissionList());
 
@@ -123,7 +126,7 @@ module.exports = function(app) {
 
   //Quiz List 
   app.get('/api/class/:id/quiz/list', Quiz.listQuiz());
-  
+
   //Quiz Delete 
   app.delete('/api/class/quiz/delete', Quiz.deleteQuiz());
   

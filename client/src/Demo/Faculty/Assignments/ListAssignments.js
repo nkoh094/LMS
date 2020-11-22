@@ -16,6 +16,9 @@ class ListAssignment extends React.Component {
             isLoading: false,
             downloadRowId: null,
             elem: {}, 
+            deletedRowId: null,
+            showModalDelete: false,
+            name: '',
 			showModal: false,
 			handleCloseModal: false,
             isValid: {
@@ -35,7 +38,29 @@ class ListAssignment extends React.Component {
 	closeDownloadModal() {
 		this.setState({ showModal: false });
     }
+     
+    openDeleteModal(value) {
+		this.setState({ name: value.title, status: true, showModalDelete: true, deletedRowId: value.id });
+    }
     
+	closeDeleteModal() {
+		this.setState({ showModalDelete: false });
+    }
+
+    handleDelete() {
+        this.setState({ showModalDelete: false, isLoading: true });
+		axios.delete(`${config.prod}/api/class/assignment/delete`, { data: { assign_id: this.state.deletedRowId } })
+			.then(response => {
+				this.createNotification('success', 'Assignment Deleted Successfully');
+				this.getAssignmentList();
+			})
+			.catch(err => {
+				this.setState({ isLoading: false, name: '' });
+				console.log('Error: deleting data from db ', err.response);
+                this.createNotification('error', 'Error while deleting data from db');
+			});
+    }
+
     goToSubmissions(e, assign) {
         e.preventDefault();
         this.props.history.push(`/faculty/class/${assign.class_id}/assignment/${assign.id}/submissions`);
@@ -98,6 +123,13 @@ class ListAssignment extends React.Component {
 		});
     }
     
+    cancelDelete() {
+		this.setState({ 
+            showModalDelete: false,
+			name: ''
+		});
+    }
+
     goBack(e) {
         e.preventDefault();
         this.props.history.push(`/faculty/class/list`);
@@ -130,6 +162,22 @@ class ListAssignment extends React.Component {
                         </Modal>
                     }
                     <NotificationContainer/>
+                    {this.state.showModalDelete && 
+                        <Modal show={this.state.showModalDelete} onHide={() => this.setState({ showModalDelete: false })}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Delete Confirm</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>Are you sure to want to delete <b>{this.state.name}</b> </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="primary" onClick={() => this.handleDelete()}>
+                                    OK
+                                </Button>
+                                <Button variant="secondary" onClick={() => this.cancelDelete()}>
+                                    Cancel
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
+                    }
                     <Col>
                         <Card>
                             <Card.Header>
@@ -157,6 +205,7 @@ class ListAssignment extends React.Component {
                                                             <td>
                                                                 <Button style={{ width: '100%' }} onClick={(e) => this.openDownloadModal(elem)} variant='primary'>Download</Button>
                                                                 <br /><Button style={{ width: '100%' }} variant="outline-primary" onClick={(e) => this.goToSubmissions(e, elem)}>Check Submissions</Button>
+                                                                <br /><Button style={{ width: '100%' }} variant="outline-danger" onClick={(e) => this.openDeleteModal(elem)}>Delete</Button>
                                                             </td>
                                                         </tr>
                                                     ))
