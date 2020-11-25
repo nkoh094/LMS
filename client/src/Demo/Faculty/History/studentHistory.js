@@ -114,6 +114,11 @@ class ListStudentsHistory extends React.Component {
     roundedTime(value) {
         return Math.round((value + Number.EPSILON) * 100) / 100;
     }
+
+    refresh(e) {
+        e.preventDefault();
+        this.getStudentsHistory();
+    }
     
     goBack(e) {
         e.preventDefault();
@@ -127,6 +132,7 @@ class ListStudentsHistory extends React.Component {
                 <Row>
                     <Col>
                         <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                        <Button onClick={(e) => this.refresh(e) } variant='outline-warning'>Refresh</Button>
                     </Col>
                 </Row>
 			    <Row>

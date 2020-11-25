@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card, Button } from 'react-bootstrap';
 import Aux from "../../../hoc/_Aux";
 import axios from 'axios';
 import config from '../../../config';
@@ -68,11 +68,21 @@ class History extends React.Component {
     roundedTime(value) {
         return Math.round((value + Number.EPSILON) * 100) / 100;
     }
+
+    refresh(e) {
+        e.preventDefault();
+        this.getStudentsHistory();
+    }
     
     render() {
         return (
             <Aux>
                 {this.state.isLoading && <Loader />}
+                <Row>
+                    <Col>
+                        <Button onClick={(e) => this.refresh(e) } variant='outline-dark'>Refresh</Button>
+                    </Col>
+                </Row>
                 <Row>
                     <NotificationContainer/>
                     <Col md={4}>
