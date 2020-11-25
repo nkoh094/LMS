@@ -43,6 +43,7 @@ const Quiz = require("./modules/quizes/quiz_model");
 const quizOption = require("./modules/quizOptions/quiz_options_model.js");
 const quizSubmission = require("./modules/quizSubmission/quiz_submission_model");
 const comment = require("./modules/comments/comments_model");
+const history = require("./modules/history/history_model");
 
 let promiseArray = [];
 // // sync db models
@@ -52,13 +53,16 @@ promiseArray.push(interests.sync());
 Promise.all(promiseArray)
   .then(() => {
     socialLogins.belongsTo(users);
+    history.belongsTo(users);
     users.hasOne(socialLogins);
     let proc = [];
     proc.push(socialLogins.sync());
     proc.push(classes.sync());
+
     Promise.all(proc)
       .then(() => {
-       
+
+        history.belongsTo(classes);
         Lectures.belongsTo(classes);
         Annoucements.belongsTo(classes);
         Topics.belongsTo(classes);
@@ -71,6 +75,7 @@ Promise.all(promiseArray)
         UserInterest.belongsTo(interests);
                        
         let promises = [];
+        promises.push(history.sync());
         promises.push(Lectures.sync());
         promises.push(Annoucements.sync());
         promises.push(Topics.sync());
@@ -104,6 +109,7 @@ Promise.all(promiseArray)
             prom.push(quizOption.sync());
             prom.push(quizSubmission.sync());
             prom.push(comment.sync());
+
 
             Promise.all(prom)
               .then(() => {

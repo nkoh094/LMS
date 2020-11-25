@@ -12,7 +12,7 @@ const Dashboard = React.lazy(() => import("./Demo/dashboard/dashboard"));
 const FacultyDashboard = React.lazy(() => import("./Demo/dashboard/dashboard"));
 
 //Admin
-const AdminDashboard = React.lazy(() => import("./Demo/dashboard/dashboard"));
+const AdminDashboard = React.lazy(() => import("./Demo/Admin/history/history"));
 const Interest = React.lazy(() => import("./Demo/Admin/interests/interests"));
 const Students = React.lazy(() => import("./Demo/Admin/students/students"));
 const Teachers = React.lazy(() => import("./Demo/Admin/teachers/teachers"));
@@ -37,6 +37,7 @@ const AddQuiz = React.lazy(() => import("./Demo/Faculty/Quizes/AddQuiz"));
 const ListQuiz = React.lazy(() => import("./Demo/Faculty/Quizes/ListQuiz"));
 const QuizSubmissionList = React.lazy(() => import("./Demo/Faculty/Quizes/SubmissionList"));
 const StudentsEnrolled = React.lazy(() => import("./Demo/Faculty/CourseContent/ListStudentsEnrolled"));
+const StudentsHistory = React.lazy(() => import("./Demo/Faculty/History/studentHistory"));
 
 //Users
 const UeserInterests = React.lazy(() => import("./Demo/Users/Interests/Interests"));
@@ -81,6 +82,7 @@ const routes = [
     { path: '/faculty/class/:id/students/list', exact: true, faculty: true, component: RequireAuth(StudentsEnrolled) },
     { path: '/faculty/class/:class_id/topic/:id/discussion', exact: true, faculty: true, component: RequireAuth(UserPrivateDiscussion) },
     { path: '/faculty/general/topic/:id/discussion', exact: true, faculty: true, component: RequireAuth(UserGeneralDiscussion) },
+    { path: '/faculty/class/:id/user/:user_id/history', exact: true, faculty: true, component: RequireAuth(StudentsHistory) },
     
     //users routes
     { path: '/dashboard', exact: true, user: true, faculty: false, component: RequireAuth(Dashboard) },

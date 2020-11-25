@@ -6,6 +6,23 @@ import config from '../../../config';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Loader from '../../../App/layout/Loader';
 import { connect } from 'react-redux';
+import * as actions from '../../../store/actions/userActions';
+import BrowserInteractionTime from 'browser-interaction-time';
+
+const browserInteractionTime = new BrowserInteractionTime({
+    timeIntervalEllapsedCallbacks: [],
+    absoluteTimeEllapsedCallbacks: [],
+    browserTabInactiveCallbacks: [],
+    browserTabActiveCallbacks: [],
+    idleTimeoutMs: 6000,
+    checkCallbacksIntervalMs: 250
+});
+
+const callbackInActive = () => browserInteractionTime.stopTimer();
+browserInteractionTime.addBrowserTabInactiveCallback(callbackInActive);
+
+const callbackActive = () => browserInteractionTime.startTimer();
+browserInteractionTime.addBrowserTabActiveCallback(callbackActive);
 
 class ListClasses extends React.Component {
 
@@ -29,8 +46,21 @@ class ListClasses extends React.Component {
     componentDidMount = async () => {
         if (this.props.user && this.props.user.id) {
             await this.setState({ user_id: this.props.user.id });
+            this.props.createHistory({ user_id: this.props.user.id, page_name: 'list Classes', class_id: 0 });
             this.getClassesList();
         }
+    }
+    
+    componentWillUnmount = async () => {
+        let timeElapsed = browserInteractionTime.getTimeInMilliseconds();
+        let timeInMinutes = (timeElapsed / 60000);
+        
+        this.props.createTimeSpent({ 
+            user_id: this.props.user.id, page_name: 'list classes', 
+            class_id: 0, time_spent: timeInMinutes 
+        });
+        browserInteractionTime.stopTimer();
+        browserInteractionTime.destroy();
     }
     
     getClassesList() {
@@ -173,4 +203,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(ListClasses);
+export default connect(mapStateToProps, actions)(ListClasses);

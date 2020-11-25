@@ -6,6 +6,23 @@ import config from '../../../config';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Loader from '../../../App/layout/Loader';
 import { connect } from 'react-redux';
+import * as actions from '../../../store/actions/userActions';
+import BrowserInteractionTime from 'browser-interaction-time';
+
+const browserInteractionTime = new BrowserInteractionTime({
+    timeIntervalEllapsedCallbacks: [],
+    absoluteTimeEllapsedCallbacks: [],
+    browserTabInactiveCallbacks: [],
+    browserTabActiveCallbacks: [],
+    idleTimeoutMs: 6000,
+    checkCallbacksIntervalMs: 250
+});
+
+const callbackInActive = () => browserInteractionTime.stopTimer();
+browserInteractionTime.addBrowserTabInactiveCallback(callbackInActive);
+
+const callbackActive = () => browserInteractionTime.startTimer();
+browserInteractionTime.addBrowserTabActiveCallback(callbackActive);
 
 class Interests extends React.Component {
 
@@ -51,7 +68,22 @@ class Interests extends React.Component {
 
 
     componentDidMount() {
-        this.getInterestList();
+        if (this.props && this.props.user && this.props.user.id) {
+            this.props.createHistory({ user_id: this.props.user.id, page_name: 'Interests', class_id: 0 });
+            this.getInterestList();
+        }
+    }
+    
+    componentWillUnmount = async () => {
+        let timeElapsed = browserInteractionTime.getTimeInMilliseconds();
+        let timeInMinutes = (timeElapsed / 60000);
+        
+        this.props.createTimeSpent({ 
+            user_id: this.props.user.id, page_name: 'Interests', 
+            class_id: 0, time_spent: timeInMinutes 
+        });
+        browserInteractionTime.stopTimer();
+        browserInteractionTime.destroy();
     }
     
     getInterestList() {
@@ -192,4 +224,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(Interests);
+export default connect(mapStateToProps, actions)(Interests);

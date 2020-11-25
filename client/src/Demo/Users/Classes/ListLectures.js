@@ -6,6 +6,23 @@ import config from '../../../config';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Loader from '../../../App/layout/Loader';
 import { connect } from 'react-redux';
+import * as actions from '../../../store/actions/userActions';
+import BrowserInteractionTime from 'browser-interaction-time';
+
+const browserInteractionTime = new BrowserInteractionTime({
+    timeIntervalEllapsedCallbacks: [],
+    absoluteTimeEllapsedCallbacks: [],
+    browserTabInactiveCallbacks: [],
+    browserTabActiveCallbacks: [],
+    idleTimeoutMs: 6000,
+    checkCallbacksIntervalMs: 250
+});
+
+const callbackInActive = () => browserInteractionTime.stopTimer();
+browserInteractionTime.addBrowserTabInactiveCallback(callbackInActive);
+
+const callbackActive = () => browserInteractionTime.startTimer();
+browserInteractionTime.addBrowserTabActiveCallback(callbackActive);
 
 class ListVideoLectures extends React.Component {
 
@@ -27,9 +44,22 @@ class ListVideoLectures extends React.Component {
 
     componentDidMount = async () => {
         if (this.props && this.props.user && this.props.user.id && this.props.match && this.props.match.params && this.props.match.params.id) {
-            await this.setState({ class_id: this.props.match.params.id })
+            await this.setState({ class_id: this.props.match.params.id });
+            this.props.createHistory({ user_id: this.props.user.id, page_name: 'list lectures', class_id: this.props.match.params.id });
             this.getLecturesList();
         }
+    }
+    
+    componentWillUnmount = async () => {
+        let timeElapsed = browserInteractionTime.getTimeInMilliseconds();
+        let timeInMinutes = (timeElapsed / 60000);
+        
+        this.props.createTimeSpent({ 
+            user_id: this.props.user.id, page_name: 'list lectures', 
+            class_id: this.props.match.params.id, time_spent: timeInMinutes 
+        });
+        browserInteractionTime.stopTimer();
+        browserInteractionTime.destroy();
     }
     
     getLecturesList() {
@@ -130,4 +160,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(ListVideoLectures);
+export default connect(mapStateToProps, actions)(ListVideoLectures);

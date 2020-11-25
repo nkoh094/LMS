@@ -10,6 +10,23 @@ import fileDownload from 'js-file-download';
 import Dropzone from 'react-dropzone';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import * as actions from '../../../store/actions/userActions';
+import BrowserInteractionTime from 'browser-interaction-time';
+
+const browserInteractionTime = new BrowserInteractionTime({
+    timeIntervalEllapsedCallbacks: [],
+    absoluteTimeEllapsedCallbacks: [],
+    browserTabInactiveCallbacks: [],
+    browserTabActiveCallbacks: [],
+    idleTimeoutMs: 6000,
+    checkCallbacksIntervalMs: 250
+});
+
+const callbackInActive = () => browserInteractionTime.stopTimer();
+browserInteractionTime.addBrowserTabInactiveCallback(callbackInActive);
+
+const callbackActive = () => browserInteractionTime.startTimer();
+browserInteractionTime.addBrowserTabActiveCallback(callbackActive);
 
 class ListAssignment extends React.Component {
 
@@ -150,9 +167,22 @@ class ListAssignment extends React.Component {
 
     componentDidMount = async () => {
         if (this.props && this.props.user && this.props.user.id && this.props.match && this.props.match.params && this.props.match.params.id) {
-            await this.setState({ class_id: this.props.match.params.id })
+            await this.setState({ class_id: this.props.match.params.id });
+            this.props.createHistory({ user_id: this.props.user.id, page_name: 'list assignments', class_id: this.props.match.params.id });
             this.getAssignmentList();
         }
+    }
+    
+    componentWillUnmount = async () => {
+        let timeElapsed = browserInteractionTime.getTimeInMilliseconds();
+        let timeInMinutes = (timeElapsed / 60000);
+        
+        this.props.createTimeSpent({ 
+            user_id: this.props.user.id, page_name: 'list assignments', 
+            class_id: this.props.match.params.id, time_spent: timeInMinutes 
+        });
+        browserInteractionTime.stopTimer();
+        browserInteractionTime.destroy();
     }
     
     getAssignmentList() {
@@ -455,4 +485,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, null)(ListAssignment);
+export default connect(mapStateToProps, actions)(ListAssignment);

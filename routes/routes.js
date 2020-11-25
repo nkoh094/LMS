@@ -12,6 +12,7 @@ const Assignments = require('../modules/assignments/assignments_controller');
 const CourseMaterial = require('../modules/courseMaterial/course_material_controller');
 const Quiz = require('../modules/quizes/quiz_controller');
 const Comment = require('../modules/comments/comments_controller');
+const History = require('../modules/history/history_controller');
 
 module.exports = function(app) {
   
@@ -177,4 +178,16 @@ module.exports = function(app) {
   app.get('/api/users/class/:class_id/quiz/:quiz_id/submission', Quiz.getUserQuiz());
   
   app.post('/api/users/quiz/submit', Quiz.submitQuiz());
+
+  //create history
+  app.post('/api/history/create', History.createUserHistory());
+  
+  //create time spent
+  app.post('/api/history/time/create', History.createUserTimeHistory());
+  
+  //list user history
+  app.get('/api/history/class/:class_id/user/:user_id/list', History.listUserHistory());
+
+  //list history admin
+  app.get('/api/history/list', History.listHistory());
 };

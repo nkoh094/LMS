@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
+    "browser-interaction-time": "^2.0.3",
     "express": "^4.17.1",
     "font-awesome": "^4.7.0",
     "google-maps-react": "^2.0.2",
