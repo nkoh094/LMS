@@ -190,4 +190,7 @@ module.exports = function(app) {
 
   //list history admin
   app.get('/api/history/list', History.listHistory());
+
+  //list user progress
+  app.get('/api/progress/class/:class_id/user/:user_id/list', Assignments.userProgress());
 };

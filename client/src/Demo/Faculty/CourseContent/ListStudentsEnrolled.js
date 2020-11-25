@@ -42,6 +42,10 @@ class ListStudentsEnrolled extends React.Component {
         this.props.history.push(`/faculty/class/${this.state.class_id}/user/${value.id}/history`);
     }
 
+    openStudentProgress(value) {
+        this.props.history.push(`/faculty/class/${this.state.class_id}/user/${value.id}/progress`);
+    }
+    
     getStudentsEnrolledList() {
         this.setState({ isLoading: true });
 		axios.get(`${config.prod}/api/class/${this.state.class_id}/student/list`)
@@ -125,7 +129,8 @@ class ListStudentsEnrolled extends React.Component {
                                                             <td>{elem.u_id}</td>
                                                             <td>{new Date(elem.createdAt).toString()}</td>
                                                             <td>
-                                                                <Button onClick={(e) => this.openStudentHistory(elem)} variant='primary'>Check History</Button>
+                                                                <Button onClick={(e) => this.openStudentHistory(elem)} style={{ width: "100%" }} variant='primary'>Check History</Button><br />
+                                                                <Button onClick={(e) => this.openStudentProgress(elem)} style={{ width: "100%" }} variant='outline-primary'>Check Progress</Button>
                                                             </td>
                                                         </tr>
                                                     ))

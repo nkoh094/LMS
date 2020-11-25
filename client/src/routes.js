@@ -38,6 +38,7 @@ const ListQuiz = React.lazy(() => import("./Demo/Faculty/Quizes/ListQuiz"));
 const QuizSubmissionList = React.lazy(() => import("./Demo/Faculty/Quizes/SubmissionList"));
 const StudentsEnrolled = React.lazy(() => import("./Demo/Faculty/CourseContent/ListStudentsEnrolled"));
 const StudentsHistory = React.lazy(() => import("./Demo/Faculty/History/studentHistory"));
+const StudentProgress = React.lazy(() => import("./Demo/Faculty/Progress/StudentProgress"));
 
 //Users
 const UeserInterests = React.lazy(() => import("./Demo/Users/Interests/Interests"));
@@ -83,6 +84,7 @@ const routes = [
     { path: '/faculty/class/:class_id/topic/:id/discussion', exact: true, faculty: true, component: RequireAuth(UserPrivateDiscussion) },
     { path: '/faculty/general/topic/:id/discussion', exact: true, faculty: true, component: RequireAuth(UserGeneralDiscussion) },
     { path: '/faculty/class/:id/user/:user_id/history', exact: true, faculty: true, component: RequireAuth(StudentsHistory) },
+    { path: '/faculty/class/:id/user/:user_id/progress', exact: true, faculty: true, component: RequireAuth(StudentProgress) },
     
     //users routes
     { path: '/dashboard', exact: true, user: true, faculty: false, component: RequireAuth(Dashboard) },
