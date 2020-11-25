@@ -2,6 +2,8 @@ const assignmentModel = require ('./assignments_model');
 const fs = require('fs');
 const submissionModel = require('../studentFacultyAssignments/student_faculty_assignment_model');
 const userModel = require('../users/users_model');
+const quizModel = require('../quizes/quiz_model');
+const quizSubmissionModel = require('../quizSubmission/quiz_submission_model');
 
 class Assignment {
   
@@ -118,6 +120,45 @@ class Assignment {
                 return res.status(200).send({ count, data: newRows });
             } catch (err) {
                 console.log('Error in listing user assignments from db', err);
+                return res.status(500).json({ msg: 'Internal Server Error', error: err });
+            }   
+        }
+    }
+
+    userProgress() {
+        return async (req, res) => { 
+            
+            let { class_id, user_id } = req.params;
+            
+            if (!class_id || !user_id) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+
+            try {
+                const userResult = await userModel.findOne({ where: { id: user_id } });
+                const result = await assignmentModel.findAndCountAll({ where: { is_deleted: false, class_id }, include: [ submissionModel ] });
+                const result1 = await quizModel.findAndCountAll({ where: { is_deleted: false, class_id }, include: [ quizSubmissionModel ] });
+               
+                let { rows } = result;
+                rows = JSON.parse(JSON.stringify(rows));
+                let newRows = [];
+                rows.forEach(elem => {
+                    let filtered = elem.assignment_submissions.filter(x => x.user_id == user_id);
+                    newRows.push({...elem, assignment_submissions : filtered.length ? filtered[0] : {} });
+                });
+
+                let quizRows = result1.rows;
+                quizRows = JSON.parse(JSON.stringify(quizRows));
+                let newQuizRows = [];
+                quizRows.forEach(elem => {
+                    let filtered = elem.quiz_submissions.filter(x => x.user_id == user_id);
+                    newQuizRows.push({...elem, quiz_submissions : filtered.length ? filtered[0] : {} });
+                });
+
+                let progressData = { assignments: newRows, quizes: newQuizRows, user: userResult }; 
+                return res.status(200).send({ data: progressData });
+            } catch (err) {
+                console.log('Error in listing user progress from db', err);
                 return res.status(500).json({ msg: 'Internal Server Error', error: err });
             }   
         }
