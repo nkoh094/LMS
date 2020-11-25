@@ -132,8 +132,8 @@ class DiscusionForum extends React.Component {
                                                         <Col>
                                                             <Card>
                                                                 <Card.Header>
-                                                                    <Card.Title as='h6'>
-                                                                        { `${elem.user.first_name} ${elem.user.last_name}` }
+                                                                    <Card.Title as='h6' style={{ fontFamily: 'cursive' }}>
+                                                                        <b> username: { `${elem.user.first_name} ${elem.user.last_name}` } </b>
                                                                     </Card.Title>
                                                                 </Card.Header>
                                                                 <Card.Body>
