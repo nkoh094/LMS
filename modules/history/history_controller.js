@@ -1,5 +1,6 @@
 const historyModel = require('./history_model');
 const userModel = require('../users/users_model');
+const db = require('../../config/db_config');
 
 class UserHistory {
   
@@ -15,7 +16,7 @@ class UserHistory {
             }
             
             try {
-                let condition = { user_id, page_name };
+                let condition = { user_id, page_name, is_deleted: false };
                 if (class_id) {
                     condition.class_id = class_id
                 }
@@ -37,7 +38,26 @@ class UserHistory {
             }
         }
     }
-    
+
+    resetUserHistory() {
+        return async (req, res) => { 
+            
+            const { date } = req.body;
+            
+            if (!req.body || !date) {
+                return res.status(400).send({ msg: 'Bad Request' });
+            }
+            
+            try {
+                const result = await historyModel.update({ is_deleted: true }, { where: {  updatedAt: { [db.DataTypes.Op.lte]: new Date(date) } } });
+                return res.status(200).json({ msg: 'History Reset Successfully' });
+            } catch (err) {
+                console.log('Error in finding history: ', err);
+                return  res.status(500).json({ msg: 'Internal Server Error', error: err });
+            }
+        }
+    }
+
     createUserTimeHistory() {
         return async (req, res) => { 
             
@@ -48,7 +68,7 @@ class UserHistory {
             }
             
             try {
-                let condition = { user_id, page_name };
+                let condition = { user_id, page_name, is_deleted: false };
                 if (class_id) {
                     condition.class_id = class_id
                 }
@@ -80,7 +100,7 @@ class UserHistory {
             }
 
             try {
-                const result = await historyModel.findAndCountAll({ where: { user_id, class_id }, include: [ userModel ] });
+                const result = await historyModel.findAndCountAll({ where: { user_id, class_id, is_deleted: false }, include: [ userModel ] });
                 const { count, rows } = result;
                 return res.status(200).send({ count, data: rows });
             } catch (err) {
@@ -94,7 +114,7 @@ class UserHistory {
         return async (req, res) => { 
            
             try {
-                const result = await historyModel.findAndCountAll({ });
+                const result = await historyModel.findAndCountAll({ where: { is_deleted: false } });
                 let { count, rows } = result;
                 rows = JSON.parse(JSON.stringify(rows));
                 let dView = { 

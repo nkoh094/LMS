@@ -16,6 +16,7 @@ const AdminDashboard = React.lazy(() => import("./Demo/Admin/history/history"));
 const Interest = React.lazy(() => import("./Demo/Admin/interests/interests"));
 const Students = React.lazy(() => import("./Demo/Admin/students/students"));
 const Teachers = React.lazy(() => import("./Demo/Admin/teachers/teachers"));
+const Clustering = React.lazy(() => import("./Demo/Admin/clustering/clustering"));
 
 //Faculty
 const Classes = React.lazy(() => import("./Demo/Faculty/Classes/Classes"));
@@ -39,6 +40,7 @@ const QuizSubmissionList = React.lazy(() => import("./Demo/Faculty/Quizes/Submis
 const StudentsEnrolled = React.lazy(() => import("./Demo/Faculty/CourseContent/ListStudentsEnrolled"));
 const StudentsHistory = React.lazy(() => import("./Demo/Faculty/History/studentHistory"));
 const StudentProgress = React.lazy(() => import("./Demo/Faculty/Progress/StudentProgress"));
+const ClassClustering = React.lazy(() => import("./Demo/Faculty/Clustering/Clustering"));
 
 //Users
 const UeserInterests = React.lazy(() => import("./Demo/Users/Interests/Interests"));
@@ -59,11 +61,13 @@ const routes = [
     { path: '/verify/identity', exact: true, user: true, faculty: true, component: RequireAuth(VerifyIdentity) },
     { path: '/home', exact: true, user: false, faculty: true, component: RequireAuth(FacultyDashboard) },
     { path: '/admin/dashboard', exact: true, admin: true, component: RequireAuth(AdminDashboard) },
+    { path: '/admin/dashboard/clustering', exact: true, admin: true, component: RequireAuth(Clustering) },
     { path: '/admin/interest', exact: true, admin: true, component: RequireAuth(Interest) },
     { path: '/admin/student/list', exact: true, admin: true, component: RequireAuth(Students) },
     { path: '/admin/teacher/list', exact: true, admin: true, component: RequireAuth(Teachers) },
     { path: '/faculty/class/list', exact: true, faculty: true, component: RequireAuth(Classes) },
     { path: '/faculty/class/create', exact: true, faculty: true, component: RequireAuth(CreateClass) },
+    { path: '/faculty/class/:id/clustering', exact: true, faculty: true, component: RequireAuth(ClassClustering) },
     { path: '/faculty/class/:id/course/create', exact: true, faculty: true, component: RequireAuth(AddVideoLecture) },
     { path: '/faculty/class/:id/course/list', exact: true, faculty: true, component: RequireAuth(ListVideoLecture) },
     { path: '/faculty/class/:id/topic/create', exact: true, faculty: true, component: RequireAuth(AddTopic) },

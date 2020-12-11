@@ -90,6 +90,11 @@ class ListStudentsEnrolled extends React.Component {
         e.preventDefault();
         this.props.history.push(`/faculty/class/list`);
     }
+    
+    clustering(e) {
+        e.preventDefault();
+        this.props.history.push(`/faculty/class/${this.state.class_id}/clustering`);
+    }
 
     render() {
         return (
@@ -98,6 +103,7 @@ class ListStudentsEnrolled extends React.Component {
                 <Row>
                     <Col>
                         <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                        <Button onClick={(e) => this.clustering(e) } variant='outline-primary'>Clustering</Button>
                     </Col>
                 </Row>
 			    <Row>

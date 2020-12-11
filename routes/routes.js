@@ -181,6 +181,9 @@ module.exports = function(app) {
 
   //create history
   app.post('/api/history/create', History.createUserHistory());
+
+  //reset history 
+  app.post('/api/history/reset', History.resetUserHistory());
   
   //create time spent
   app.post('/api/history/time/create', History.createUserTimeHistory());

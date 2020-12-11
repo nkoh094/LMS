@@ -2,6 +2,7 @@ export default {
     // prod: 'https://repo-host-api.herokuapp.com', //development
     // prod: 'http://18.130.186.120:5000', //production
     prod: '',
+    py_prod: 'http://localhost:4000',
     REACT_APP_FACEBOOK_APP_ID: '797442954129952',
     defaultPath: '/dashboard',
     basename: '', // only at build time to set

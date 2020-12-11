@@ -73,6 +73,27 @@ class History extends React.Component {
         e.preventDefault();
         this.getStudentsHistory();
     }
+
+    reset(e) {
+        e.preventDefault();
+        this.setState({ isLoading: true });
+        let date = new Date().toISOString();
+		axios.post(`${config.prod}/api/history/reset`, { date })
+			.then(response => {
+                this.createNotification('success', 'Reset history successfully');
+                this.getStudentsHistory();
+			})
+			.catch(err => {
+				this.setState({ isLoading: false });
+				console.log('Error: reseting history', err.response);
+                this.createNotification('error', 'Error while Reset history');
+			});
+    }
+    
+    clustering(e) {
+        e.preventDefault();
+        this.props.history.push(`/admin/dashboard/clustering`);
+    }
     
     render() {
         return (
@@ -81,6 +102,8 @@ class History extends React.Component {
                 <Row>
                     <Col>
                         <Button onClick={(e) => this.refresh(e) } variant='outline-dark'>Refresh</Button>
+                        <Button onClick={(e) => this.reset(e) } variant='outline-danger'>Reset</Button>
+                        <Button onClick={(e) => this.clustering(e) } variant='outline-primary'>Clustering</Button>
                     </Col>
                 </Row>
                 <Row>
