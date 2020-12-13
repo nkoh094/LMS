@@ -83,6 +83,11 @@ class Clustering extends React.Component {
         e.preventDefault();
         this.props.history.push(`/faculty/class/${this.state.class_id}/students/list`);
     }
+
+    refresh(e) {
+        e.preventDefault();
+        this.getClusteringResult();
+    }
   
     render() {
         return (
@@ -92,6 +97,7 @@ class Clustering extends React.Component {
                     <NotificationContainer />
                     <Col>
                         <Button onClick={(e) => this.goBack(e) } variant='outline-dark'>Back</Button>
+                        <Button onClick={(e) => this.refresh(e) } variant='outline-primary'>Refresh</Button>
                     </Col>
                 </Row>
                 <fieldset disabled={this.state.isLoading} className={this.state.isLoading ? 'opacity-5' : ''}>

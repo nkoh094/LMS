@@ -161,7 +161,7 @@ class UserHistory {
                         dView.enrolledClasses = dView.enrolledClasses + elem.no_views;
                         dView.enrolledClasses_time_spent = dView.enrolledClasses_time_spent + elem.time_spent;
                     }
-                    if (elem.page_name === "list General Topics") {
+                    if (elem.page_name === "List General Topics") {
                         dView.generalTopics = dView.generalTopics + elem.no_views;
                         dView.generalTopics_time_spent = dView.generalTopics_time_spent + elem.time_spent;
                     }
